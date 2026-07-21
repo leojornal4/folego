@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f4f6fa; /* Fundo off-white azulado sutil, reduz fadiga visual */
+  --foreground: #0f172a; /* Slate 900 de alto contraste para leitura clara */
+  --card: #ffffff;
+  --card-foreground: #1e293b; /* Slate 800 */
+  --border: #e2e8f0; /* Borda visível e limpa */
+  --primary: #1e40af; /* Azul clássico e sofisticado */
+  --primary-foreground: #ffffff;
+  --gold: #b45309; /* Dourado escuro de alta legibilidade no modo claro */
+  --gold-foreground: #78350f;
+  
+  --font-lora: 'Lora', serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+@theme {
+  --font-serif: var(--font-lora), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  
+  --color-gold-50: #fefcf3;
+  --color-gold-100: #fcf6da;
+  --color-gold-200: #f8ebb3;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b59227;
+  
+  --color-soft-blue-50: #f4f8fc;
+  --color-soft-blue-100: #e8f0f9;
+  --color-soft-blue-200: #d4e3f4;
+  --color-soft-blue-500: #2d5a88;
+  --color-soft-blue-600: #214366;
+
+  --color-card-bg: var(--card);
+  --color-border-subtle: var(--border);
+}
+
+.dark {
+  --background: #0f1013;
+  --foreground: #e4e6eb;
+  --card: #16171d;
+  --card-foreground: #e4e6eb;
+  --border: #23252d;
+  --primary: #4a82b8;
+  --primary-foreground: #ffffff;
+  --gold: #dfba56;
+  --gold-foreground: #2d2610;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dark .glass {
+  background: rgba(22, 23, 29, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Animations and Utilities */
+.text-serif {
+  font-family: var(--font-lora), Georgia, serif;
+}
+
+.glow-gold {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.glow-blue {
+  box-shadow: 0 0 15px rgba(45, 90, 136, 0.08);
+}
+
