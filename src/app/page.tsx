@@ -59,11 +59,12 @@ function AppContent() {
             <div className="flex items-center justify-center md:justify-start space-x-2">
               <span className="text-lg font-bold font-serif text-gold-500">📖</span>
               <h4 className="font-bold text-sm text-gray-800 dark:text-white font-serif">
-                Leitura Bíblica
+                Fôlego
               </h4>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 font-serif leading-relaxed italic max-w-md">
-              "Lâmpada para os meus pés é a tua palavra e luz, para o meu caminho."
+            <p className="text-gray-500 dark:text-gray-400 font-serif leading-relaxed max-w-md">
+              <span className="block italic">O sopro da Palavra para sua vida.</span>
+              <span className="block text-[11px] mt-1 italic text-gray-400">"Lâmpada para os meus pés é a tua palavra e luz, para o meu caminho."</span>
               <span className="block mt-0.5 font-semibold text-gold-500">— Salmos 119:105</span>
             </p>
           </div>
@@ -80,7 +81,7 @@ function AppContent() {
             </div>
             <div className="flex items-center space-x-3 text-gray-400 dark:text-gray-500">
               <p className="text-[10px] text-center md:text-right">
-                © 2026 Leitura Bíblica. Todos os direitos reservados.
+                © 2026 Fôlego. Todos os direitos reservados.
               </p>
               <span>•</span>
               <button

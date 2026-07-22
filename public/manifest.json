@@ -1,7 +1,7 @@
 {
-  "name": "Leitura Bíblica - Portal da Igreja",
-  "short_name": "Leitura Bíblica",
-  "description": "Plataforma Premium de Leitura Bíblica Diária e Portal de Comunicação Oficial.",
+  "name": "Fôlego - Portal da Igreja",
+  "short_name": "Fôlego",
+  "description": "Fôlego - Plataforma Premium de Leitura Bíblica Diária e Portal de Comunicação Oficial.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f4f6fa",

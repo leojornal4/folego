@@ -51,10 +51,13 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo e Nome da Igreja */}
-          <div className="flex items-center cursor-pointer" onClick={() => setActiveTab("diario")}>
-            <h1 className="text-lg sm:text-xl font-bold font-serif text-soft-blue-500 dark:text-foreground leading-tight tracking-tight">
-              Leitura Bíblica
+          <div className="flex flex-col cursor-pointer justify-center" onClick={() => setActiveTab("diario")}>
+            <h1 className="text-lg sm:text-xl font-bold font-serif text-soft-blue-500 dark:text-foreground leading-none tracking-tight">
+              Fôlego
             </h1>
+            <span className="hidden sm:inline text-[9px] text-gray-400 dark:text-gray-500 font-serif leading-none mt-1">
+              O sopro da Palavra para sua vida.
+            </span>
           </div>
 
           {/* Navegação Desktop */}

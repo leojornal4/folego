@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Leitura Bíblica | Portal da Igreja",
-  description: "Plataforma Premium de Leitura Bíblica Diária e Hub de Comunicação da Igreja",
+  title: "Fôlego | Portal da Igreja",
+  description: "Fôlego - Plataforma Premium de Leitura Bíblica Diária e Hub de Comunicação da Igreja",
   manifest: "/manifest.json",
 };
 
