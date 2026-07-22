@@ -100,6 +100,9 @@ interface AppContextProps {
   estudosTematicos: EstudoTematico[];
   progressoEstudos: { [licaoId: string]: boolean };
   marcarLicaoConcluida: (licaoId: string, concluida: boolean) => void;
+  adicionarEstudo: (e: Omit<EstudoTematico, "id">) => void;
+  editarEstudo: (e: EstudoTematico) => void;
+  excluirEstudo: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -135,7 +138,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [motivos, setMotivos] = useState<string[]>([]);
   
   // Estados para Estudos Temáticos
-  const [estudosTematicos] = useState<EstudoTematico[]>(ESTUDOS_TEMATICOS_PADRAO);
+  const [estudosTematicos, setEstudosTematicos] = useState<EstudoTematico[]>([]);
   const [progressoEstudos, setProgressoEstudos] = useState<{ [licaoId: string]: boolean }>({});
 
   // Sincronização assíncrona do Supabase
@@ -252,6 +255,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         console.error(e);
       }
     }
+
+    // Carregar catálogo de estudos temáticos
+    const storedEstudos = localStorage.getItem("church_portal_estudos");
+    if (storedEstudos) {
+      try {
+        setEstudosTematicos(JSON.parse(storedEstudos));
+      } catch (e) {
+        setEstudosTematicos(ESTUDOS_TEMATICOS_PADRAO);
+        localStorage.setItem("church_portal_estudos", JSON.stringify(ESTUDOS_TEMATICOS_PADRAO));
+      }
+    } else {
+      setEstudosTematicos(ESTUDOS_TEMATICOS_PADRAO);
+      localStorage.setItem("church_portal_estudos", JSON.stringify(ESTUDOS_TEMATICOS_PADRAO));
+    }
   }, []);
 
   // Fetch or update rotated contents when date or DB changes
@@ -345,6 +362,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const updated = { ...progressoEstudos, [licaoId]: concluida };
     setProgressoEstudos(updated);
     localStorage.setItem("church_portal_estudos_progresso", JSON.stringify(updated));
+  };
+
+  const adicionarEstudo = (e: Omit<EstudoTematico, "id">) => {
+    const newEstudo: EstudoTematico = {
+      ...e,
+      id: `estudo_${Math.random().toString(36).substr(2, 9)}`
+    };
+    const updated = [newEstudo, ...estudosTematicos];
+    setEstudosTematicos(updated);
+    localStorage.setItem("church_portal_estudos", JSON.stringify(updated));
+  };
+
+  const editarEstudo = (e: EstudoTematico) => {
+    const updated = estudosTematicos.map(x => x.id === e.id ? e : x);
+    setEstudosTematicos(updated);
+    localStorage.setItem("church_portal_estudos", JSON.stringify(updated));
+  };
+
+  const excluirEstudo = (id: string) => {
+    const updated = estudosTematicos.filter(x => x.id !== id);
+    setEstudosTematicos(updated);
+    localStorage.setItem("church_portal_estudos", JSON.stringify(updated));
   };
 
   const enviarPedidoOracao = async (nome: string, telefone: string, mensagem: string, anonimo: boolean, privado: boolean, motivo: string) => {
@@ -751,7 +790,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         
         estudosTematicos,
         progressoEstudos,
-        marcarLicaoConcluida
+        marcarLicaoConcluida,
+        adicionarEstudo,
+        editarEstudo,
+        excluirEstudo
       }}
     >
       {children}

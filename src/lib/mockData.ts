@@ -370,6 +370,142 @@ export const ESTUDOS_TEMATICOS_PADRAO: EstudoTematico[] = [
         oracao: "Pai, eu levanto hoje o escudo da fé contra toda mentira, medo ou desânimo que tenta invadir minha mente. Declaro que o Teu caminho é perfeito e a Tua palavra é totalmente confiável. Sou protegido pelo Teu amor. Amém."
       }
     ]
+  },
+  {
+    id: "financas",
+    titulo: "Sabedoria e Finanças à Luz da Bíblia",
+    descricao: "Explore os princípios eternos de Deus para gerenciar seus recursos materiais com sabedoria, fidelidade e paz.",
+    categoria: "Mordomia Bíblica",
+    imagemUrl: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=800&auto=format&fit=crop",
+    ico: "BookMarked",
+    licoes: [
+      {
+        id: "financas-1",
+        titulo: "De Quem é a Riqueza?",
+        introducao: "O primeiro passo para a liberdade financeira é entender que somos mordomos, e não donos.",
+        conteudo: "<p>A Bíblia afirma claramente que tudo pertence ao Senhor. O ouro, a prata, as terras e a nossa própria vida. Quando mudamos nossa mentalidade de 'proprietários' para 'mordomos' (aqueles que administram algo em nome de outro), libertamo-nos do peso da possessividade e da ganância.</p><p>Honrar a Deus com as primícias dos nossos ganhos é um ato de adoração que reconhece Sua soberania e provisão constante sobre nós.</p>",
+        passagens: ["Salmos 24:1", "Provérbios 3:9-10"],
+        reflexao: [
+          "Como o conceito de ser um 'mordomo' altera a sua percepção sobre os seus bens e salário?",
+          "De que forma você pode expressar gratidão e adoração a Deus por meio do seu orçamento hoje?"
+        ],
+        oracao: "Senhor, reconheço que tudo o que tenho vem de Ti. Obrigado pelo sustento e pela oportunidade de gerenciar os Teus recursos. Ajuda-me a ser um mordomo fiel e generoso. Amém."
+      },
+      {
+        id: "financas-2",
+        titulo: "Evitando Dívidas e Planejando",
+        introducao: "A prudência bíblica nos orienta a poupar, planejar e evitar as armadilhas do endividamento.",
+        conteudo: "<p>Provérbios nos alerta que quem toma emprestado se torna servo de quem empresta. O endividamento descontrolado limita nossa liberdade de servir a Deus e abençoar outros. A Palavra elogia o sábio que planeja e armazena recursos em sua casa para tempos difíceis.</p><p>Viver um degrau abaixo das nossas possibilidades e planejar os gastos com sabedoria nos afasta das angústias financeiras.</p>",
+        passagens: ["Provérbios 22:7", "Provérbios 21:20"],
+        reflexao: [
+          "O que tem impedido você de planejar melhor suas despesas e poupar recursos?",
+          "Identifique um hábito de consumo que você pode ajustar para honrar melhor sua estabilidade financeira."
+        ],
+        oracao: "Pai, dá-me sabedoria para conter impulsos de consumo e planejar minha vida financeira com disciplina. Livra-me das amarras das dívidas para que eu possa servir-te com inteira liberdade. Amém."
+      }
+    ]
+  },
+  {
+    id: "familia",
+    titulo: "Restauração de Relacionamentos e Família",
+    descricao: "Edifique seu lar e seus relacionamentos sobre as colunas bíblicas do perdão, do amor sacrificial e da verdade.",
+    categoria: "Família",
+    imagemUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=800&auto=format&fit=crop",
+    ico: "Heart",
+    licoes: [
+      {
+        id: "familia-1",
+        titulo: "O Vínculo do Perdão",
+        introducao: "Nenhum relacionamento sobrevive sem a prática diária e intencional do perdão mútuo.",
+        conteudo: "<p>Paulo nos exorta a suportar uns aos outros e a perdoar mutuamente, assim como Cristo nos perdoou. O perdão não é um sentimento, mas uma decisão espiritual de liberar a dívida de quem nos ofendeu. Sem perdão, o rancor cria raízes que destroem casamentos e amizades.</p><p>O amor é o vínculo da perfeição que une corações em meio às imperfeições humanas.</p>",
+        passagens: ["Colossenses 3:13-14", "1 Pedro 4:8"],
+        reflexao: [
+          "Existe alguém no seu círculo familiar ou de amizade que você precisa decidir perdoar hoje?",
+          "Como o perdão que você recebeu de Cristo serve de modelo para você perdoar os outros?"
+        ],
+        oracao: "Querido Pai, perdoa-me pelos meus erros, assim como decido hoje perdoar quem me magoou. Retiro toda raiz de amargura do meu peito e decido amar com o Teu amor sacrificial. Amém."
+      },
+      {
+        id: "familia-2",
+        titulo: "Edificando o Lar sobre a Palavra",
+        introducao: "A proteção e solidez da família dependem da presença e orientação de Deus no cotidiano do lar.",
+        conteudo: "<p>Se o Senhor não edificar a casa, em vão trabalham os construtores. Edificar o lar sob a Palavra significa cultivar um ambiente de oração, respeito e bondade recíproca. Tratar uns aos outros com compaixão e brandura blinda a família contra as divisões deste mundo.</p><p>Que a sua casa seja um refúgio de paz onde o caráter de Cristo é refletido.</p>",
+        passagens: ["Salmos 127:1", "Efésios 4:32"],
+        reflexao: [
+          "Como você avalia o 'alicerce espiritual' da sua casa hoje? Onde precisam melhorar?",
+          "Que passos práticos de bondade e respeito você pode dar em direção aos seus familiares hoje?"
+        ],
+        oracao: "Senhor Jesus, eu consagro minha casa e minha família a Ti. Edifica o nosso lar sobre a Tua verdade. Que haja paz, respeito, união e compaixão em nossa convivência diária. Amém."
+      }
+    ]
+  },
+  {
+    id: "discipulado",
+    titulo: "Crescimento Espiritual e Discipulado",
+    descricao: "Foque na intimidade com Deus para frutificar espiritualmente e cumprir o chamado de fazer novos discípulos.",
+    categoria: "Crescimento",
+    imagemUrl: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=800&auto=format&fit=crop",
+    ico: "BookMarked",
+    licoes: [
+      {
+        id: "discipulado-1",
+        titulo: "Permanecendo na Videira",
+        introducao: "O crescimento espiritual não é esforço humano, mas o resultado natural de permanecer conectado a Cristo.",
+        conteudo: "<p>Jesus afirma ser a Videira Verdadeira e nós as varas. Sem Ele, nada podemos fazer de valor eterno. Permanecer em Cristo significa cultivar uma vida constante de oração, leitura bíblica e obediência. O fruto do Espírito cresce em nós na medida em que nos submetemos ao Seu trabalhar.</p><p>O fruto gerado glorifica ao Pai e abençoa o próximo.</p>",
+        passagens: ["João 15:4-5", "Gálatas 5:22-23"],
+        reflexao: [
+          "Você tem separado tempo diário para simplesmente 'permanecer' e conversar com a Videira (Jesus)?",
+          "Qual aspecto do Fruto do Espírito (paz, paciência, mansidão, bondade) você mais deseja ver crescer hoje?"
+        ],
+        oracao: "Jesus, reconheço que sem Ti eu nada posso fazer. Decido permanecer em Ti hoje e nutrir minha alma com a Tua presença. Limpa o meu coração para que eu produza muito fruto para a Tua glória. Amém."
+      },
+      {
+        id: "discipulado-2",
+        titulo: "Tomando a Cruz e Seguindo",
+        introducao: "O verdadeiro discipulado envolve renúncia pessoal e obediência à grande comissão.",
+        conteudo: "<p>Jesus convida seus seguidores a negarem-se a si mesmos, tomarem sua cruz a cada dia e segui-lo. O caminho do discipulado requer alinhar a nossa vontade com os planos eternos do mestre. Além disso, somos comissionados a ir e fazer discípulos de todas as nações.</p><p>A caminhada com Cristo é ativa e nos move a ensinar e caminhar ao lado de outros irmãos.</p>",
+        passagens: ["Lucas 9:23", "Mateus 28:19-20"],
+        reflexao: [
+          "O que significa para você 'negar-se a si mesmo' e tomar sua cruz na rotina atual?",
+          "Quem na sua comunidade você pode apoiar e discipular compartilhando o que tem aprendido?"
+        ],
+        oracao: "Mestre Jesus, aceito o Teu convite para tomar minha cruz a cada dia e seguir-te. Capacita-me com o Teu Espírito para anunciar a Tua graça e caminhar em amor com os meus irmãos. Amém."
+      }
+    ]
+  },
+  {
+    id: "desanimo",
+    titulo: "Vencendo o Desânimo e a Tristeza",
+    descricao: "Encontre cura, restauração mental e a renovação de suas forças emocionais no refúgio seguro de Deus.",
+    categoria: "Cura Interior",
+    imagemUrl: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=80&w=800&auto=format&fit=crop",
+    ico: "Compass",
+    licoes: [
+      {
+        id: "desanimo-1",
+        titulo: "Forças Renovadas",
+        introducao: "Deus é o especialista em dar força ao cansado e multiplicar o vigor daquele que se sente fraco.",
+        conteudo: "<p>O profeta Isaías nos garante que mesmo os jovens mais fortes se cansam e tropeçam, mas aqueles que esperam no Senhor renovam suas forças. Eles sobem com asas como águias, correm e não se cansam, caminham e não se fatigam. Esperar em Deus é confiar no Seu tempo e repousar em Seu poder.</p><p>Quando a alma estiver triste, podemos questionar e direcionar nossos pensamentos para a soberania do Pai.</p>",
+        passagens: ["Isaías 40:29-31", "Salmos 42:11"],
+        reflexao: [
+          "Em quais áreas do seu coração você tem se sentido espiritualmente ou emocionalmente esgotado ultimamente?",
+          "O que significa para você, hoje, 'esperar no Senhor' para renovar o seu vigor?"
+        ],
+        oracao: "Senhor, meu vigor se esgotou e me sinto cansado. Venho a Ti para receber o Teu renovo. Escolho esperar em Ti, pois sei que renovarás minhas forças e me farás andar com segurança sobre as alturas. Amém."
+      },
+      {
+        id: "desanimo-2",
+        titulo: "A Alegria que Fortalece",
+        introducao: "A alegria do Senhor é a nossa sentinela e força nos dias de tristeza.",
+        conteudo: "<p>Neemias nos exorta: 'Não vos entristeçais; porque a alegria do Senhor é a vossa força'. Essa alegria não depende do riso constante ou de facilidades terrenas, mas da certeza inabalável da nossa salvação. O choro pode durar uma noite inteira, mas o favor de Deus garante que a alegria virá pela manhã.</p><p>Foque nos motivos eternos de regozijo que temos em Cristo.</p>",
+        passagens: ["Neemias 8:10", "Salmos 30:5"],
+        reflexao: [
+          "Como a certeza da sua salvação em Cristo pode trazer alegria mesmo quando as circunstâncias atuais são tristes?",
+          "Como você pode focar hoje na bondade de Deus para afastar a sombra do desânimo?"
+        ],
+        oracao: "Querido Deus, preenche o meu ser com a Tua alegria, que é a minha fortaleza. Creio que, embora o choro dure uma noite, a Tua restauração e alegria virão pela manhã sobre a minha vida. Amém."
+      }
+    ]
   }
 ];
 

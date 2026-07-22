@@ -2,11 +2,11 @@
 
 import { useApp } from "@/context/AppContext";
 import {
-  FileText, Calendar, Plus, CheckCircle, Clock, Users, Shield, Compass, BookOpen, AlertCircle, Trash, Award, Trash2, Edit2, X, Image, Upload, TrendingUp, Sparkles, MessageSquare, Heart, Lock, KeyRound, Eye, EyeOff, LogOut
+  FileText, Calendar, Plus, CheckCircle, Clock, Users, Shield, Compass, BookOpen, AlertCircle, Trash, Award, Trash2, Edit2, X, Image, Upload, TrendingUp, Sparkles, MessageSquare, Heart, Lock, KeyRound, Eye, EyeOff, LogOut, BookMarked
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Evento, Aviso, Noticia, LeituraProgramada, Devocional } from "@/lib/mockData";
+import { LeituraProgramada, Devocional, EstudoTematico, Licao } from "@/lib/mockData";
 
 const STRONG_ADMIN_PASSWORD = "BiblePortal#2026!Admin";
 
@@ -14,29 +14,22 @@ export default function AdminDashboard() {
   const {
     leituras,
     devocionais,
-    eventos,
-    avisos,
-    noticias,
     pedidosOracao,
     adicionarLeitura,
     adicionarDevocional,
-    adicionarEvento,
-    adicionarAviso,
-    adicionarNoticia,
     atenderPedidoOracao,
     acessos,
-    editarEvento,
-    excluirEvento,
-    editarAviso,
-    excluirAviso,
-    editarNoticia,
-    excluirNoticia,
     excluirLeitura,
     excluirDevocional,
     excluirPedidoOracao,
     excluirComentarioOracao,
     motivos,
-    salvarMotivos
+    salvarMotivos,
+    
+    estudosTematicos,
+    adicionarEstudo,
+    editarEstudo,
+    excluirEstudo
   } = useApp();
 
   // Autenticação por Senha Forte
@@ -104,27 +97,25 @@ export default function AdminDashboard() {
   const [devPray, setDevPray] = useState("");
   const [editingDevDate, setEditingDevDate] = useState<string | null>(null);
 
-  // Formulário Evento
-  const [evTitle, setEvTitle] = useState("");
-  const [evDesc, setEvDesc] = useState("");
-  const [evDate, setEvDate] = useState("");
-  const [evLocal, setEvLocal] = useState("");
-  const [evImg, setEvImg] = useState("");
-  const [editingEvId, setEditingEvId] = useState<string | null>(null);
+  // Estados para Gerenciar Estudos (CRUD)
+  const [estudoId, setEstudoId] = useState<string | null>(null);
+  const [estudoTitle, setEstudoTitle] = useState("");
+  const [estudoDesc, setEstudoDesc] = useState("");
+  const [estudoCat, setEstudoCat] = useState("Vida Cristã");
+  const [estudoImg, setEstudoImg] = useState("");
+  const [estudoIcon, setEstudoIcon] = useState("Compass");
 
-  // Formulário Aviso
-  const [avTitle, setAvTitle] = useState("");
-  const [avCat, setAvCat] = useState("Estudo Bíblico");
-  const [avDate, setAvDate] = useState("Semanal");
-  const [editingAvId, setEditingAvId] = useState<string | null>(null);
+  // Estado para selecionar qual estudo estamos gerenciando as lições
+  const [selectedEstudoParaLicoes, setSelectedEstudoParaLicoes] = useState<EstudoTematico | null>(null);
 
-  // Formulário Notícia
-  const [noTitle, setNoTitle] = useState("");
-  const [noResume, setNoResume] = useState("");
-  const [noContent, setNoContent] = useState("");
-  const [noDate, setNoDate] = useState("");
-  const [noImg, setNoImg] = useState("");
-  const [editingNoId, setEditingNoId] = useState<string | null>(null);
+  // Estados para Gerenciar Lições (CRUD)
+  const [licaoId, setLicaoId] = useState<string | null>(null);
+  const [licaoTitle, setLicaoTitle] = useState("");
+  const [licaoIntro, setLicaoIntro] = useState("");
+  const [licaoContent, setLicaoContent] = useState("");
+  const [licaoPassagens, setLicaoPassagens] = useState("");
+  const [licaoReflexao, setLicaoReflexao] = useState("");
+  const [licaoOracao, setLicaoOracao] = useState("");
 
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg);
@@ -192,126 +183,131 @@ export default function AdminDashboard() {
     setDevPray("");
   };
 
-  const handleCreateEvento = (e: React.FormEvent) => {
+  const handleSaveEstudo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!evTitle.trim() || !evDate || !evLocal.trim()) return;
+    if (!estudoTitle.trim()) return;
 
-    const imageUrl = evImg.trim() || DEFAULT_EVENT_IMAGE;
-
-    if (editingEvId) {
-      editarEvento({
-        id: editingEvId,
-        titulo: evTitle,
-        descricao: evDesc,
-        data: evDate,
-        local: evLocal,
-        imagemUrl: imageUrl,
+    if (estudoId) {
+      const existing = estudosTematicos.find(x => x.id === estudoId);
+      editarEstudo({
+        id: estudoId,
+        titulo: estudoTitle,
+        descricao: estudoDesc,
+        categoria: estudoCat,
+        imagemUrl: estudoImg || "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=800&auto=format&fit=crop",
+        ico: estudoIcon,
+        licoes: existing ? existing.licoes : []
       });
-      showSuccess("Evento atualizado!");
-      setEditingEvId(null);
+      showSuccess("Estudo Temático atualizado com sucesso!");
+      setEstudoId(null);
     } else {
-      adicionarEvento({
-        titulo: evTitle,
-        descricao: evDesc,
-        data: evDate,
-        local: evLocal,
-        imagemUrl: imageUrl,
+      adicionarEstudo({
+        titulo: estudoTitle,
+        descricao: estudoDesc,
+        categoria: estudoCat,
+        imagemUrl: estudoImg || "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=800&auto=format&fit=crop",
+        ico: estudoIcon,
+        licoes: []
       });
-      showSuccess("Evento oficial registrado!");
+      showSuccess("Novo Estudo Temático cadastrado!");
     }
 
-    setEvTitle("");
-    setEvDesc("");
-    setEvDate("");
-    setEvLocal("");
-    setEvImg("");
+    setEstudoTitle("");
+    setEstudoDesc("");
+    setEstudoCat("Vida Cristã");
+    setEstudoImg("");
+    setEstudoIcon("Compass");
   };
 
-  const handleCreateAviso = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!avTitle.trim()) return;
+  const startEditEstudo = (estudo: EstudoTematico) => {
+    setEstudoId(estudo.id);
+    setEstudoTitle(estudo.titulo);
+    setEstudoDesc(estudo.descricao);
+    setEstudoCat(estudo.categoria);
+    setEstudoImg(estudo.imagemUrl);
+    setEstudoIcon(estudo.ico);
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  };
 
-    if (editingAvId) {
-      editarAviso({
-        id: editingAvId,
-        titulo: avTitle,
-        categoria: avCat,
-        data: avDate,
-      });
-      showSuccess("Aviso atualizado!");
-      setEditingAvId(null);
+  const handleSaveLicao = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedEstudoParaLicoes || !licaoTitle.trim()) return;
+
+    const formattedContent = licaoContent.startsWith("<p>") ? licaoContent : `<p>${licaoContent.replace(/\n/g, "</p><p>")}</p>`;
+    const formattedPassagens = licaoPassagens.split(",").map(x => x.trim()).filter(Boolean);
+    const formattedReflexao = licaoReflexao.split("\n").map(x => x.trim()).filter(Boolean);
+
+    const targetStudy = estudosTematicos.find(x => x.id === selectedEstudoParaLicoes.id);
+    if (!targetStudy) return;
+
+    let updatedLicoes = [...targetStudy.licoes];
+
+    if (licaoId) {
+      updatedLicoes = updatedLicoes.map(l => l.id === licaoId ? {
+        id: licaoId,
+        titulo: licaoTitle,
+        introducao: licaoIntro,
+        conteudo: formattedContent,
+        passagens: formattedPassagens,
+        reflexao: formattedReflexao,
+        oracao: licaoOracao
+      } : l);
+      showSuccess("Lição atualizada com sucesso!");
+      setLicaoId(null);
     } else {
-      adicionarAviso({
-        titulo: avTitle,
-        categoria: avCat,
-        data: avDate,
-      });
-      showSuccess("Aviso cadastrado com sucesso!");
+      const newLicao: Licao = {
+        id: `licao_${Math.random().toString(36).substr(2, 9)}`,
+        titulo: licaoTitle,
+        introducao: licaoIntro,
+        conteudo: formattedContent,
+        passagens: formattedPassagens,
+        reflexao: formattedReflexao,
+        oracao: licaoOracao
+      };
+      updatedLicoes.push(newLicao);
+      showSuccess("Nova lição adicionada ao tema!");
     }
 
-    setAvTitle("");
+    const updatedStudy = {
+      ...targetStudy,
+      licoes: updatedLicoes
+    };
+
+    editarEstudo(updatedStudy);
+    setSelectedEstudoParaLicoes(updatedStudy);
+
+    setLicaoTitle("");
+    setLicaoIntro("");
+    setLicaoContent("");
+    setLicaoPassagens("");
+    setLicaoReflexao("");
+    setLicaoOracao("");
   };
 
-  const handleCreateNoticia = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!noTitle.trim() || !noContent.trim() || !noDate) return;
-
-    const imageUrl = noImg.trim() || DEFAULT_NEWS_IMAGE;
-
-    if (editingNoId) {
-      editarNoticia({
-        id: editingNoId,
-        titulo: noTitle,
-        resumo: noResume,
-        conteudo: noContent.startsWith("<p>") ? noContent : `<p>${noContent.replace(/\n/g, "</p><p>")}</p>`,
-        imagemUrl: imageUrl,
-        galeria: [],
-        data: noDate,
-      });
-      showSuccess("Notícia atualizada!");
-      setEditingNoId(null);
-    } else {
-      adicionarNoticia({
-        titulo: noTitle,
-        resumo: noResume,
-        conteudo: `<p>${noContent.replace(/\n/g, "</p><p>")}</p>`,
-        imagemUrl: imageUrl,
-        galeria: [],
-        data: noDate,
-      });
-      showSuccess("Notícia publicada com sucesso!");
-    }
-
-    setNoTitle("");
-    setNoResume("");
-    setNoContent("");
-    setNoDate("");
-    setNoImg("");
+  const startEditLicao = (licao: Licao) => {
+    setLicaoId(licao.id);
+    setLicaoTitle(licao.titulo);
+    setLicaoIntro(licao.introducao);
+    setLicaoContent(licao.conteudo.replace(/<p>/g, "").replace(/<\/p>/g, "\n").trim());
+    setLicaoPassagens(licao.passagens.join(", "));
+    setLicaoReflexao(licao.reflexao.join("\n"));
+    setLicaoOracao(licao.oracao);
   };
 
-  const startEditEvento = (ev: Evento) => {
-    setEditingEvId(ev.id);
-    setEvTitle(ev.titulo);
-    setEvDesc(ev.descricao);
-    setEvDate(ev.data);
-    setEvLocal(ev.local);
-    setEvImg(ev.imagemUrl === DEFAULT_EVENT_IMAGE ? "" : ev.imagemUrl);
-  };
+  const handleDeletarLicao = (idLicao: string) => {
+    if (!selectedEstudoParaLicoes) return;
+    const targetStudy = estudosTematicos.find(x => x.id === selectedEstudoParaLicoes.id);
+    if (!targetStudy) return;
 
-  const startEditAviso = (av: Aviso) => {
-    setEditingAvId(av.id);
-    setAvTitle(av.titulo);
-    setAvCat(av.categoria);
-    setAvDate(av.data || "Semanal");
-  };
+    const updatedLicoes = targetStudy.licoes.filter(l => l.id !== idLicao);
+    const updatedStudy = {
+      ...targetStudy,
+      licoes: updatedLicoes
+    };
 
-  const startEditNoticia = (no: Noticia) => {
-    setEditingNoId(no.id);
-    setNoTitle(no.titulo);
-    setNoResume(no.resumo);
-    setNoContent(no.conteudo.replace(/<p>/g, "").replace(/<\/p>/g, "\n").trim());
-    setNoDate(no.data);
-    setNoImg(no.imagemUrl === DEFAULT_NEWS_IMAGE ? "" : no.imagemUrl);
+    editarEstudo(updatedStudy);
+    setSelectedEstudoParaLicoes(updatedStudy);
+    showSuccess("Lição removida com sucesso!");
   };
 
   const startEditLeitura = (l: LeituraProgramada) => {
@@ -475,7 +471,7 @@ export default function AdminDashboard() {
                   : "border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               }`}
             >
-              {tab === "resumo" ? "Resumo / Métricas" : tab === "leituras" ? "Leitura & Devocional" : tab === "conteudo" ? "Gerenciar Mural" : "Pedidos Recebidos"}
+              {tab === "resumo" ? "Resumo / Métricas" : tab === "leituras" ? "Leitura & Devocional" : tab === "conteudo" ? "Gerenciar Estudos" : "Pedidos Recebidos"}
             </button>
           ))}
         </div>
@@ -950,378 +946,427 @@ export default function AdminDashboard() {
             </motion.div>
           )}
 
-          {/* TAB 3: GERENCIAR MURAL (Eventos, Notícias, Avisos) */}
+          {/* TAB 3: GERENCIAR ESTUDOS TEMÁTICOS */}
           {activeAdminTab === "conteudo" && (
             <motion.div
-              key="admin-conteudo"
+              key="admin-estudos"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start"
+              className="space-y-8"
             >
-              {/* 1. Evento */}
-              <div className="p-5 rounded-3xl bg-card-bg border border-border-subtle shadow-sm space-y-5">
-                <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                  <h4 className="text-sm font-bold font-serif text-gray-800 dark:text-white">
-                    {editingEvId ? "✍️ Editar Evento" : "Criar Evento"}
-                  </h4>
-                  {editingEvId && (
-                    <button
-                      onClick={() => {
-                        setEditingEvId(null);
-                        setEvTitle("");
-                        setEvDesc("");
-                        setEvDate("");
-                        setEvLocal("");
-                        setEvImg("");
-                      }}
-                      className="text-[10px] font-bold text-red-500 flex items-center space-x-0.5 hover:underline"
-                    >
-                      <X className="w-3 h-3" />
-                      <span>Cancelar</span>
-                    </button>
-                  )}
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                
+                {/* 1. Criar/Editar Estudo */}
+                <div className="p-5 rounded-3xl bg-card-bg border border-border-subtle shadow-sm space-y-5">
+                  <div className="flex items-center justify-between border-b border-border-subtle pb-2">
+                    <h4 className="text-sm font-bold font-serif text-gray-800 dark:text-white">
+                      {estudoId ? "✍️ Editar Tema" : "Criar Novo Tema"}
+                    </h4>
+                    {estudoId && (
+                      <button
+                        onClick={() => {
+                          setEstudoId(null);
+                          setEstudoTitle("");
+                          setEstudoDesc("");
+                          setEstudoCat("Vida Cristã");
+                          setEstudoImg("");
+                          setEstudoIcon("Compass");
+                        }}
+                        className="text-[10px] font-bold text-red-500 flex items-center space-x-0.5 hover:underline cursor-pointer"
+                      >
+                        <X className="w-3 h-3" />
+                        <span>Cancelar</span>
+                      </button>
+                    )}
+                  </div>
 
-                <form onSubmit={handleCreateEvento} className="space-y-3 text-xs">
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Título do Evento *</label>
-                    <input
-                      required
-                      type="text"
-                      value={evTitle}
-                      onChange={(e) => setEvTitle(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Descrição do Evento</label>
-                    <textarea
-                      rows={2}
-                      value={evDesc}
-                      onChange={(e) => setEvDesc(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Data e Horário *</label>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Ex: 25 de Julho, às 19h"
-                      value={evDate}
-                      onChange={(e) => setEvDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Localização *</label>
-                    <input
-                      required
-                      type="text"
-                      value={evLocal}
-                      onChange={(e) => setEvLocal(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  
-                  {/* Imagem Upload & URL */}
-                  <div className="space-y-1.5">
-                    <label className="font-semibold text-gray-500 flex items-center space-x-1">
-                      <Image className="w-3.5 h-3.5 text-soft-blue-500" />
-                      <span>Imagem do Evento</span>
-                    </label>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2.5">
+                  <form onSubmit={handleSaveEstudo} className="space-y-3 text-xs">
+                    <div className="space-y-1">
+                      <label className="font-semibold text-gray-500">Título do Tema *</label>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Ex: Libertação da Ansiedade"
+                        value={estudoTitle}
+                        onChange={(e) => setEstudoTitle(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="font-semibold text-gray-500">Categoria *</label>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Ex: Vida Cristã, Doutrina"
+                        value={estudoCat}
+                        onChange={(e) => setEstudoCat(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-semibold text-gray-500">Descrição Curta *</label>
+                      <textarea
+                        required
+                        rows={2}
+                        placeholder="Escreva um resumo para o catálogo..."
+                        value={estudoDesc}
+                        onChange={(e) => setEstudoDesc(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-semibold text-gray-500">Ícone Representativo *</label>
+                      <select
+                        value={estudoIcon}
+                        onChange={(e) => setEstudoIcon(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                      >
+                        <option value="Compass">Bússola (Compass)</option>
+                        <option value="Shield">Escudo (Shield)</option>
+                        <option value="BookMarked">Livro (BookMarked)</option>
+                        <option value="Heart">Coração (Heart)</option>
+                      </select>
+                    </div>
+
+                    {/* Capa Upload / URL */}
+                    <div className="space-y-1.5">
+                      <label className="font-semibold text-gray-500 flex items-center space-x-1">
+                        <Image className="w-3.5 h-3.5 text-soft-blue-500" />
+                        <span>Capa do Tema</span>
+                      </label>
+                      <div className="space-y-2">
                         <label className="flex items-center space-x-1.5 px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 hover:bg-gray-100/50 cursor-pointer text-gray-500 font-semibold transition-colors w-full justify-center">
                           <Upload className="w-3.5 h-3.5" />
-                          <span>Enviar Arquivo</span>
+                          <span>Enviar Imagem</span>
                           <input
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                handleImageUpload(file, setEvImg);
+                                handleImageUpload(file, setEstudoImg);
                                 showSuccess("Imagem carregada!");
                               }
                             }}
                             className="hidden"
                           />
                         </label>
+                        <input
+                          type="text"
+                          placeholder="Ou cole a URL da imagem"
+                          value={estudoImg.startsWith("data:") ? "Imagem local carregada" : estudoImg}
+                          onChange={(e) => {
+                            if (!estudoImg.startsWith("data:")) {
+                              setEstudoImg(e.target.value);
+                            } else {
+                              setEstudoImg("");
+                            }
+                          }}
+                          className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                        />
+                        {estudoImg && (
+                          <div className="w-full h-24 rounded-lg overflow-hidden border border-border-subtle">
+                            <img src={estudoImg} alt="Preview" className="w-full h-full object-cover" />
+                          </div>
+                        )}
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Ou cole o link da imagem aqui"
-                        value={evImg.startsWith("data:") ? "Arquivo enviado localmente" : evImg}
-                        onChange={(e) => {
-                          if (!evImg.startsWith("data:")) {
-                            setEvImg(e.target.value);
-                          } else {
-                            setEvImg("");
-                          }
-                        }}
-                        className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                      />
-                      {evImg && (
-                        <div className="w-full h-24 rounded-lg overflow-hidden border border-border-subtle">
-                          <img src={evImg} alt="Preview" className="w-full h-full object-cover" />
-                        </div>
-                      )}
                     </div>
-                  </div>
 
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 rounded-lg bg-soft-blue-500 text-white font-semibold shadow-sm hover:bg-soft-blue-600 transition-colors"
-                  >
-                    {editingEvId ? "Atualizar Evento" : "Salvar Evento"}
-                  </button>
-                </form>
+                    <button
+                      type="submit"
+                      className="w-full py-2.5 rounded-lg bg-soft-blue-500 text-white font-semibold shadow-sm hover:bg-soft-blue-600 transition-colors cursor-pointer"
+                    >
+                      {estudoId ? "Atualizar Tema" : "Salvar Tema"}
+                    </button>
+                  </form>
+                </div>
 
-                {/* Listagem de Eventos */}
-                <div className="pt-4 border-t border-border-subtle">
-                  <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Eventos Ativos</h5>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {eventos.map((ev) => (
-                      <div key={ev.id} className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/30 border border-border-subtle text-xs">
-                        <span className="font-semibold truncate max-w-[120px]">{ev.titulo}</span>
-                        <div className="flex items-center space-x-1">
-                          <button onClick={() => startEditEvento(ev)} className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-soft-blue-500">
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-                          <button onClick={() => { excluirEvento(ev.id); showSuccess("Evento removido!"); }} className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                {/* 2. Lista de Temas Cadastrados */}
+                <div className="p-5 rounded-3xl bg-card-bg border border-border-subtle shadow-sm col-span-2 space-y-4">
+                  <h3 className="text-base font-bold font-serif text-gray-800 dark:text-white border-b border-border-subtle pb-3">
+                    Estudos Temáticos Cadastrados ({estudosTematicos.length})
+                  </h3>
+
+                  <div className="grid gap-3 max-h-[480px] overflow-y-auto pr-1">
+                    {estudosTematicos.length > 0 ? (
+                      estudosTematicos.map((estudo) => {
+                        const hasSelected = selectedEstudoParaLicoes?.id === estudo.id;
+                        return (
+                          <div
+                            key={estudo.id}
+                            className={`p-4 rounded-2xl border transition-all flex items-center justify-between text-xs ${
+                              hasSelected
+                                ? "border-soft-blue-400 bg-soft-blue-500/[0.02]"
+                                : "border-border-subtle bg-gray-50/50 dark:bg-gray-800/20 hover:bg-gray-100/50"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-3.5">
+                              <div className="w-8 h-8 rounded-xl bg-white dark:bg-gray-900 border border-border-subtle flex items-center justify-center shadow-sm">
+                                {estudo.ico === "Compass" && <Compass className="w-4 h-4 text-soft-blue-500" />}
+                                {estudo.ico === "Shield" && <Shield className="w-4 h-4 text-soft-blue-500" />}
+                                {estudo.ico === "BookMarked" && <BookMarked className="w-4 h-4 text-soft-blue-500" />}
+                                {estudo.ico === "Heart" && <Heart className="w-4 h-4 text-soft-blue-500" />}
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-gray-800 dark:text-gray-300">
+                                  {estudo.titulo}
+                                </h4>
+                                <p className="text-[10px] text-gray-400 mt-0.5">
+                                  {estudo.categoria} • {estudo.licoes.length} Lições
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center space-x-1.5">
+                              <button
+                                onClick={() => setSelectedEstudoParaLicoes(estudo)}
+                                className={`px-2.5 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                                  hasSelected
+                                    ? "bg-soft-blue-500 text-white shadow-sm"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-350 hover:bg-soft-blue-500/10 hover:text-soft-blue-500"
+                                }`}
+                              >
+                                {hasSelected ? "Gerenciando" : "Ver Lições"}
+                              </button>
+                              <button
+                                onClick={() => startEditEstudo(estudo)}
+                                className="p-2 rounded-lg hover:bg-soft-blue-500/10 text-soft-blue-500 transition-all cursor-pointer"
+                                title="Editar estudo"
+                              >
+                                <Edit2 className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm(`Tem certeza que deseja excluir o estudo "${estudo.titulo}"?`)) {
+                                    excluirEstudo(estudo.id);
+                                    if (hasSelected) setSelectedEstudoParaLicoes(null);
+                                    showSuccess("Estudo removido!");
+                                  }
+                                }}
+                                className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-all cursor-pointer"
+                                title="Excluir estudo"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p className="text-xs text-gray-400 text-center py-8">
+                        Nenhum estudo temático cadastrado.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
-              {/* 2. Aviso */}
-              <div className="p-5 rounded-3xl bg-card-bg border border-border-subtle shadow-sm space-y-5">
-                <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                  <h4 className="text-sm font-bold font-serif text-gray-800 dark:text-white">
-                    {editingAvId ? "✍️ Editar Aviso" : "Criar Aviso Curto"}
-                  </h4>
-                  {editingAvId && (
+              {/* 3. SUB-PAINEL: GERENCIAMENTO DE LIÇÕES (Apenas se estudo selecionado) */}
+              {selectedEstudoParaLicoes && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-6 rounded-3xl bg-card-bg border border-border-subtle shadow-sm space-y-6"
+                >
+                  <div className="flex items-center justify-between border-b border-border-subtle pb-3">
+                    <div>
+                      <span className="text-[10px] font-bold text-soft-blue-500 uppercase tracking-widest block mb-0.5">
+                        GERENCIAR LIÇÕES DO TEMA
+                      </span>
+                      <h4 className="text-lg font-bold font-serif text-gray-800 dark:text-white">
+                        {selectedEstudoParaLicoes.titulo}
+                      </h4>
+                    </div>
                     <button
                       onClick={() => {
-                        setEditingAvId(null);
-                        setAvTitle("");
+                        setSelectedEstudoParaLicoes(null);
+                        setLicaoId(null);
+                        setLicaoTitle("");
+                        setLicaoIntro("");
+                        setLicaoContent("");
+                        setLicaoPassagens("");
+                        setLicaoReflexao("");
+                        setLicaoOracao("");
                       }}
-                      className="text-[10px] font-bold text-red-500 flex items-center space-x-0.5 hover:underline"
+                      className="p-1.5 rounded-lg border border-border-subtle hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-600 transition-colors flex items-center space-x-1 text-xs cursor-pointer"
                     >
-                      <X className="w-3 h-3" />
-                      <span>Cancelar</span>
+                      <X className="w-4 h-4" />
+                      <span>Fechar</span>
                     </button>
-                  )}
-                </div>
+                  </div>
 
-                <form onSubmit={handleCreateAviso} className="space-y-3 text-xs">
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Título / Texto do Aviso *</label>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Ex: Santa Ceia do Senhor às 18h"
-                      value={avTitle}
-                      onChange={(e) => setAvTitle(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Categoria *</label>
-                    <select
-                      value={avCat}
-                      onChange={(e) => setAvCat(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    >
-                      <option>Estudo Bíblico</option>
-                      <option>Oração</option>
-                      <option>Mural</option>
-                      <option>Aviso Geral</option>
-                    </select>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Frequência / Data</label>
-                    <input
-                      type="text"
-                      value={avDate}
-                      onChange={(e) => setAvDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 rounded-lg bg-soft-blue-500 text-white font-semibold shadow-sm hover:bg-soft-blue-600 transition-colors"
-                  >
-                    {editingAvId ? "Atualizar Aviso" : "Salvar Aviso"}
-                  </button>
-                </form>
-
-                {/* Listagem de Avisos */}
-                <div className="pt-4 border-t border-border-subtle">
-                  <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Avisos Ativos</h5>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {avisos.map((av) => (
-                      <div key={av.id} className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/30 border border-border-subtle text-xs">
-                        <span className="font-semibold truncate max-w-[120px]">{av.titulo}</span>
-                        <div className="flex items-center space-x-1">
-                          <button onClick={() => startEditAviso(av)} className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-soft-blue-500">
-                            <Edit2 className="w-3.5 h-3.5" />
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    
+                    {/* Formulário de Lição */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between border-b border-border-subtle/80 pb-2">
+                        <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
+                          {licaoId ? "✍️ Editar Lição" : "Adicionar Lição"}
+                        </span>
+                        {licaoId && (
+                          <button
+                            onClick={() => {
+                              setLicaoId(null);
+                              setLicaoTitle("");
+                              setLicaoIntro("");
+                              setLicaoContent("");
+                              setLicaoPassagens("");
+                              setLicaoReflexao("");
+                              setLicaoOracao("");
+                            }}
+                            className="text-[10px] text-red-500 font-bold hover:underline cursor-pointer"
+                          >
+                            Cancelar
                           </button>
-                          <button onClick={() => { excluirAviso(av.id); showSuccess("Aviso removido!"); }} className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
 
-              {/* 3. Notícia */}
-              <div className="p-5 rounded-3xl bg-card-bg border border-border-subtle shadow-sm space-y-5">
-                <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                  <h4 className="text-sm font-bold font-serif text-gray-800 dark:text-white">
-                    {editingNoId ? "✍️ Editar Notícia" : "Publicar Notícia"}
-                  </h4>
-                  {editingNoId && (
-                    <button
-                      onClick={() => {
-                        setEditingNoId(null);
-                        setNoTitle("");
-                        setNoResume("");
-                        setNoContent("");
-                        setNoDate("");
-                        setNoImg("");
-                      }}
-                      className="text-[10px] font-bold text-red-500 flex items-center space-x-0.5 hover:underline"
-                    >
-                      <X className="w-3 h-3" />
-                      <span>Cancelar</span>
-                    </button>
-                  )}
-                </div>
-
-                <form onSubmit={handleCreateNoticia} className="space-y-3 text-xs">
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Título da Notícia *</label>
-                    <input
-                      required
-                      type="text"
-                      value={noTitle}
-                      onChange={(e) => setNoTitle(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Resumo da Notícia</label>
-                    <input
-                      type="text"
-                      value={noResume}
-                      onChange={(e) => setNoResume(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Conteúdo Completo *</label>
-                    <textarea
-                      required
-                      rows={2}
-                      value={noContent}
-                      onChange={(e) => setNoContent(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="font-semibold text-gray-500">Data de Publicação *</label>
-                    <input
-                      required
-                      type="date"
-                      value={noDate}
-                      onChange={(e) => setNoDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                    />
-                  </div>
-                  
-                  {/* Imagem Upload & URL Noticia */}
-                  <div className="space-y-1.5">
-                    <label className="font-semibold text-gray-500 flex items-center space-x-1">
-                      <Image className="w-3.5 h-3.5 text-soft-blue-500" />
-                      <span>Imagem da Notícia</span>
-                    </label>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2.5">
-                        <label className="flex items-center space-x-1.5 px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 hover:bg-gray-100/50 cursor-pointer text-gray-500 font-semibold transition-colors w-full justify-center">
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>Enviar Arquivo</span>
+                      <form onSubmit={handleSaveLicao} className="space-y-3 text-xs">
+                        <div className="space-y-1">
+                          <label className="font-semibold text-gray-500">Título da Lição *</label>
                           <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                handleImageUpload(file, setNoImg);
-                                showSuccess("Imagem carregada!");
-                              }
-                            }}
-                            className="hidden"
+                            required
+                            type="text"
+                            placeholder="Ex: O Cuidado de um Pai"
+                            value={licaoTitle}
+                            onChange={(e) => setLicaoTitle(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
                           />
-                        </label>
-                      </div>
-                      <input
-                        type="text"
-                        placeholder="Ou cole o link da imagem aqui"
-                        value={noImg.startsWith("data:") ? "Arquivo enviado localmente" : noImg}
-                        onChange={(e) => {
-                          if (!noImg.startsWith("data:")) {
-                            setNoImg(e.target.value);
-                          } else {
-                            setNoImg("");
-                          }
-                        }}
-                        className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none"
-                      />
-                      {noImg && (
-                        <div className="w-full h-24 rounded-lg overflow-hidden border border-border-subtle">
-                          <img src={noImg} alt="Preview" className="w-full h-full object-cover" />
                         </div>
-                      )}
+
+                        <div className="space-y-1">
+                          <label className="font-semibold text-gray-500">Introdução (Frase Curta) *</label>
+                          <input
+                            required
+                            type="text"
+                            placeholder="Frase motivadora ou de impacto..."
+                            value={licaoIntro}
+                            onChange={(e) => setLicaoIntro(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="font-semibold text-gray-500">Conteúdo Teológico/Estudo *</label>
+                          <textarea
+                            required
+                            rows={4}
+                            placeholder="Escreva a lição completa..."
+                            value={licaoContent}
+                            onChange={(e) => setLicaoContent(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500 font-serif text-sm"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="font-semibold text-gray-500">Versículos Chave (Separados por vírgula) *</label>
+                          <input
+                            required
+                            type="text"
+                            placeholder="Ex: Mateus 6:25-26, 1 Pedro 5:7"
+                            value={licaoPassagens}
+                            onChange={(e) => setLicaoPassagens(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="font-semibold text-gray-500">Perguntas de Reflexão (Uma por linha) *</label>
+                          <textarea
+                            required
+                            rows={3}
+                            placeholder="Escreva cada pergunta em uma linha separada..."
+                            value={licaoReflexao}
+                            onChange={(e) => setLicaoReflexao(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="font-semibold text-gray-500">Guia de Oração Dirigida *</label>
+                          <textarea
+                            required
+                            rows={2}
+                            placeholder="Escreva a oração final recomendada..."
+                            value={licaoOracao}
+                            onChange={(e) => setLicaoOracao(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-gray-800/40 focus:outline-none focus:border-soft-blue-500"
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full py-2.5 rounded-lg bg-soft-blue-500 text-white font-semibold hover:bg-soft-blue-600 transition-colors shadow-sm cursor-pointer"
+                        >
+                          {licaoId ? "Atualizar Lição" : "Salvar Lição"}
+                        </button>
+                      </form>
                     </div>
-                  </div>
 
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 rounded-lg bg-soft-blue-500 text-white font-semibold shadow-sm hover:bg-soft-blue-600 transition-colors"
-                  >
-                    {editingNoId ? "Atualizar Notícia" : "Publicar Notícia"}
-                  </button>
-                </form>
+                    {/* Grade de Lições Cadastradas */}
+                    <div className="col-span-2 space-y-3">
+                      <span className="text-xs font-bold text-gray-700 dark:text-gray-300 block border-b border-border-subtle/80 pb-2">
+                        Grade de Lições do Tema ({selectedEstudoParaLicoes.licoes.length})
+                      </span>
 
-                {/* Listagem de Notícias */}
-                <div className="pt-4 border-t border-border-subtle">
-                  <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Notícias Ativas</h5>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {noticias.map((no) => (
-                      <div key={no.id} className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/30 border border-border-subtle text-xs">
-                        <span className="font-semibold truncate max-w-[120px]">{no.titulo}</span>
-                        <div className="flex items-center space-x-1">
-                          <button onClick={() => startEditNoticia(no)} className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-soft-blue-500">
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-                          <button onClick={() => { excluirNoticia(no.id); showSuccess("Notícia removida!"); }} className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                      <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+                        {selectedEstudoParaLicoes.licoes.length > 0 ? (
+                          selectedEstudoParaLicoes.licoes.map((l, index) => (
+                            <div
+                              key={l.id}
+                              className="p-4 rounded-xl bg-gray-50/50 dark:bg-gray-850/40 border border-border-subtle flex items-center justify-between text-xs"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-6 h-6 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center font-bold text-gray-500 text-[10px]">
+                                  {index + 1}
+                                </div>
+                                <div>
+                                  <h5 className="font-bold text-gray-800 dark:text-gray-200">
+                                    {l.titulo}
+                                  </h5>
+                                  <p className="text-[10px] text-gray-400 mt-0.5 max-w-sm truncate">
+                                    {l.introducao}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center space-x-1.5">
+                                <button
+                                  onClick={() => startEditLicao(l)}
+                                  className="p-1.5 rounded hover:bg-soft-blue-500/10 text-soft-blue-500 cursor-pointer"
+                                  title="Editar lição"
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (confirm(`Tem certeza que deseja excluir a lição "${l.titulo}"?`)) {
+                                      handleDeletarLicao(l.id);
+                                    }
+                                  }}
+                                  className="p-1.5 rounded hover:bg-red-500/10 text-red-500 cursor-pointer"
+                                  title="Excluir lição"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-xs text-gray-450 text-center py-10 italic">
+                            Nenhuma lição adicionada a este tema ainda. Adicione a primeira lição ao lado!
+                          </p>
+                        )}
                       </div>
-                    ))}
+                    </div>
+
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              )}
             </motion.div>
           )}
 

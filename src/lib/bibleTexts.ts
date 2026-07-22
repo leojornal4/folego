@@ -136,6 +136,173 @@ export const AUTHENTIC_BIBLE_TEXTS: { [key: string]: ChapterData[] } = {
     }
   ],
 
+  // Salmos 24:1
+  "Salmos 24:1": [
+    {
+      chapter: "Salmo 24:1",
+      verses: [
+        { v: 1, text: "Ao Senhor pertence a terra e tudo o que nela se contém, o mundo e os que nele habitam." }
+      ]
+    }
+  ],
+
+  // Provérbios 3:9-10
+  "Provérbios 3:9-10": [
+    {
+      chapter: "Provérbios 3:9-10",
+      verses: [
+        { v: 9, text: "Honre o Senhor com todos os seus recursos e com os primeiros frutos de todas as suas colheitas;" },
+        { v: 10, text: "então os seus celeiros ficarão plenamente cheios, e os seus barris transbordarão de vinho novo." }
+      ]
+    }
+  ],
+
+  // Provérbios 22:7
+  "Provérbios 22:7": [
+    {
+      chapter: "Provérbios 22:7",
+      verses: [
+        { v: 7, text: "O rico domina sobre o pobre; quem toma emprestado torna-se servo de quem empresta." }
+      ]
+    }
+  ],
+
+  // Provérbios 21:20
+  "Provérbios 21:20": [
+    {
+      chapter: "Provérbios 21:20",
+      verses: [
+        { v: 20, text: "Na casa do sábio há comida de sobra e azeite da melhor qualidade, mas o tolo gasta tudo o que tem." }
+      ]
+    }
+  ],
+
+  // Colossenses 3:13-14
+  "Colossenses 3:13-14": [
+    {
+      chapter: "Colossenses 3:13-14",
+      verses: [
+        { v: 13, text: "Suportem-se uns aos outros e perdoem-se mutuamente, caso alguém tenha motivo de queixa contra outro. Perdoem como o Senhor lhes perdoou." },
+        { v: 14, text: "Acima de tudo, porém, revistam-se do amor, que é o elo perfeito." }
+      ]
+    }
+  ],
+
+  // 1 Pedro 4:8
+  "1 Pedro 4:8": [
+    {
+      chapter: "1 Pedro 4:8",
+      verses: [
+        { v: 8, text: "Sobretudo, amem-se sinceramente uns aos outros, porque o amor cobre uma multidão de pecados." }
+      ]
+    }
+  ],
+
+  // Salmos 127:1
+  "Salmos 127:1": [
+    {
+      chapter: "Salmo 127:1",
+      verses: [
+        { v: 1, text: "Se o Senhor não edificar a casa, em vão trabalham os que a edificam; se o Senhor não guardar a cidade, em vão vigia a sentinela." }
+      ]
+    }
+  ],
+
+  // Efésios 4:32
+  "Efésios 4:32": [
+    {
+      chapter: "Efésios 4:32",
+      verses: [
+        { v: 32, text: "Sejam bondosos e compassivos uns para com os outros, perdoando-se mutuamente, assim como Deus os perdoou em Cristo." }
+      ]
+    }
+  ],
+
+  // João 15:4-5
+  "João 15:4-5": [
+    {
+      chapter: "João 15:4-5",
+      verses: [
+        { v: 4, text: "Permaneçam em mim, e eu permanecerei em vocês. Nenhum ramo pode dar fruto por si mesmo, se não permanecer na videira. Vocês também não podem dar fruto, se não permanecerem em mim." },
+        { v: 5, text: "Eu sou a videira; vocês são os ramos. Se alguém permanecer em mim e eu nele, esse dá muito fruto; pois sem mim vocês não podem fazer coisa alguma." }
+      ]
+    }
+  ],
+
+  // Gálatas 5:22-23
+  "Gálatas 5:22-23": [
+    {
+      chapter: "Gálatas 5:22-23",
+      verses: [
+        { v: 22, text: "Mas o fruto do Espírito é: amor, alegria, paz, paciência, amabilidade, bondade, fidelidade," },
+        { v: 23, text: "mansidão e domínio próprio. Contra essas coisas não há lei." }
+      ]
+    }
+  ],
+
+  // Lucas 9:23
+  "Lucas 9:23": [
+    {
+      chapter: "Lucas 9:23",
+      verses: [
+        { v: 23, text: "Jesus dizia a todos: 'Se alguém quiser acompanhar-me, negue-se a si mesmo, tome diariamente a sua cruz e siga-me.'" }
+      ]
+    }
+  ],
+
+  // Mateus 28:19-20
+  "Mateus 28:19-20": [
+    {
+      chapter: "Mateus 28:19-20",
+      verses: [
+        { v: 19, text: "Portanto, vão e façam discípulos de todas as nações, batizando-os em nome do Pai e do Filho e do Espírito Santo," },
+        { v: 20, text: "ensinando-os a obedecer a tudo o que lhes ordenei. E eu estarei sempre com vocês, até o fim dos tempos." }
+      ]
+    }
+  ],
+
+  // Isaías 40:29-31
+  "Isaías 40:29-31": [
+    {
+      chapter: "Isaías 40:29-31",
+      verses: [
+        { v: 29, text: "Ele fortalece ao cansado e dá grande vigor ao que está sem forças." },
+        { v: 30, text: "Até os jovens se cansam e ficam exaustos, e os moços tropeçam e caem;" },
+        { v: 31, text: "mas aqueles que esperam no Senhor renovam as suas forças. Voam alto como águias; correm e não ficam exaustos, caminham e não se cansam." }
+      ]
+    }
+  ],
+
+  // Salmos 42:11
+  "Salmos 42:11": [
+    {
+      chapter: "Salmo 42:11",
+      verses: [
+        { v: 11, text: "Por que você está assim tão triste, ó minha alma? Por que está assim tão perturbada dentro de mim? Ponha a sua esperança em Deus! Pois ainda o louvarei; ele é o meu Salvador e o meu Deus." }
+      ]
+    }
+  ],
+
+  // Neemias 8:10
+  "Neemias 8:10": [
+    {
+      chapter: "Neemias 8:10",
+      verses: [
+        { v: 10, text: "E Neemias acrescentou: 'Vão para casa, comam e bebam do melhor, e enviem porções aos que nada têm preparado. Este dia é consagrado ao nosso Senhor. Não fiquem tristes, porque a alegria do Senhor é a vossa força.'" }
+      ]
+    }
+  ],
+
+  // Salmos 30:5
+  "Salmos 30:5": [
+    {
+      chapter: "Salmo 30:5",
+      verses: [
+        { v: 5, text: "Pois a sua ira só dura um instante, mas o seu favor dura a vida inteira; o choro pode persistir uma noite, mas de manhã irrompe a alegria." }
+      ]
+    }
+  ],
+
   // Salmos 11
   "Salmos 11": [
     {
