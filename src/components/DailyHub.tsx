@@ -4,6 +4,7 @@ import { useApp } from "@/context/AppContext";
 import { BookOpen, Calendar as CalendarIcon, CheckCircle2, ChevronLeft, ChevronRight, HelpCircle, Quote, Share2, Sparkles, Trophy } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { shareCard } from "@/utils/shareImage";
 
 export default function DailyHub() {
   const {
@@ -53,20 +54,15 @@ export default function DailyHub() {
     return formatter.format(dateObj);
   };
 
-  // Compartilhar Versículo
-  const handleShare = () => {
-    if (!versiculo) return;
-    const text = `"${versiculo.texto}" - ${versiculo.referencia}\n\nLido no Catedral Digital.`;
-    if (navigator.share) {
-      navigator.share({
-        title: "Versículo do Dia",
-        text: text,
-      }).catch(console.error);
-    } else {
-      navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+  const [successMsg, setSuccessMsg] = useState("");
+  const showSuccess = (msg: string) => {
+    setSuccessMsg(msg);
+    setTimeout(() => setSuccessMsg(""), 3000);
+  };
+
+  // Compartilhar qualquer cartão via Canvas Image ou Text Fallback
+  const handleShareCard = async (type: string, content: string, extra?: string) => {
+    await shareCard({ cardType: type, content, extra }, showSuccess);
   };
 
   // Estatísticas de Progresso
@@ -166,7 +162,22 @@ export default function DailyHub() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 relative">
+      {/* Toast Alert de Compartilhamento */}
+      <AnimatePresence>
+        {successMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: -25, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: -25, x: "-50%" }}
+            className="fixed top-24 left-1/2 z-50 p-4 rounded-xl bg-green-600 text-white font-bold text-xs shadow-md border border-green-500/30 flex items-center space-x-2"
+          >
+            <span>✓</span>
+            <span>{successMsg}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header Mobile */}
       <div className="sm:hidden flex items-center justify-between pb-2 border-b border-border-subtle/50">
         <div>
@@ -214,11 +225,11 @@ export default function DailyHub() {
               </span>
 
               <button
-                onClick={handleShare}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 text-white/90 hover:bg-white/20 transition-all text-xs font-semibold hover:scale-105 duration-300"
+                onClick={() => handleShareCard("Versículo do Dia", versiculo.texto, versiculo.referencia)}
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 text-white/90 hover:bg-white/20 transition-all text-xs font-semibold hover:scale-105 duration-300 cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>{copied ? "Copiado!" : "Compartilhar"}</span>
+                <span>Compartilhar</span>
               </button>
             </div>
           </div>
@@ -297,12 +308,21 @@ export default function DailyHub() {
               )}
 
               {leituraHoje && (
-                <button
-                  onClick={() => setActiveTab("leitura")}
-                  className="px-6 py-3 rounded-2xl bg-soft-blue-500 hover:bg-soft-blue-600 text-white font-medium text-sm transition-all duration-300 shadow-md glow-blue hover:scale-[1.02]"
-                >
-                  {progressoLeitura[selectedDate] ? "Rever Leitura" : "Iniciar Leitura"}
-                </button>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handleShareCard("Leitura de Hoje", `Leituras recomendadas para hoje: ${leituraHoje.leituras.join(", ")}`, selectedDate)}
+                    className="p-3 rounded-2xl border border-border-subtle hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-500 hover:text-soft-blue-500 transition-all cursor-pointer flex items-center justify-center"
+                    title="Compartilhar leitura do dia"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("leitura")}
+                    className="px-6 py-3 rounded-2xl bg-soft-blue-500 hover:bg-soft-blue-600 text-white font-medium text-sm transition-all duration-300 shadow-md glow-blue hover:scale-[1.02] cursor-pointer"
+                  >
+                    {progressoLeitura[selectedDate] ? "Rever Leitura" : "Iniciar Leitura"}
+                  </button>
+                </div>
               )}
             </div>
           </motion.div>
@@ -315,13 +335,22 @@ export default function DailyHub() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="p-6 sm:p-8 rounded-3xl bg-card-bg border border-border-subtle shadow-[0_8px_30px_rgb(0,0,0,0.02)]"
             >
-              <div className="pb-4 border-b border-border-subtle">
-                <span className="text-[10px] bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-400 px-2.5 py-1 rounded-full font-bold border border-gold-200/50">
-                  📖 DEVOCIONAL DO DIA
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold font-serif text-gray-800 dark:text-white mt-2">
-                  {devocionalHoje.titulo}
-                </h3>
+              <div className="pb-4 border-b border-border-subtle flex items-start justify-between">
+                <div>
+                  <span className="text-[10px] bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-400 px-2.5 py-1 rounded-full font-bold border border-gold-200/50">
+                    📖 DEVOCIONAL DO DIA
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold font-serif text-gray-800 dark:text-white mt-2">
+                    {devocionalHoje.titulo}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => handleShareCard("Devocional do Dia", devocionalHoje.texto, devocionalHoje.titulo)}
+                  className="p-2 rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-400 hover:text-soft-blue-500 transition-colors flex items-center justify-center cursor-pointer mt-1"
+                  title="Compartilhar devocional"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
               </div>
 
               {/* Conteúdo Devocional (HTML) */}
@@ -360,10 +389,19 @@ export default function DailyHub() {
               <div className="p-6 rounded-3xl bg-card-bg border border-border-subtle shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[220px]">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-gray-400">
-                    <Quote className="w-5 h-5 text-gold-500/70" />
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500">
-                      Frase do Dia
-                    </span>
+                    <div className="flex items-center space-x-1.5">
+                      <Quote className="w-4 h-4 text-gold-500/70" />
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500">
+                        Frase do Dia
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleShareCard("Frase do Dia", frase.texto, frase.autor)}
+                      className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-400 hover:text-soft-blue-500 transition-colors cursor-pointer"
+                      title="Compartilhar frase do dia"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                   <p className="text-sm sm:text-base font-serif text-gray-700 dark:text-gray-300 italic leading-relaxed">
                     "{frase.texto}"
@@ -382,10 +420,19 @@ export default function DailyHub() {
               <div className="p-6 rounded-3xl bg-card-bg border border-border-subtle shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[220px]">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-gray-400">
-                    <span className="text-xs">🙏</span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500">
-                      Oração do Dia
-                    </span>
+                    <div className="flex items-center space-x-1.5">
+                      <span className="text-xs">🙏</span>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500">
+                        Oração do Dia
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleShareCard("Oração do Dia", oracao.texto, "Respire fundo, ore em silêncio.")}
+                      className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-400 hover:text-soft-blue-500 transition-colors cursor-pointer"
+                      title="Compartilhar oração do dia"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                   <p className="text-sm font-serif text-gray-700 dark:text-gray-300 italic leading-relaxed">
                     "{oracao.texto}"
