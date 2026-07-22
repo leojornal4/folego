@@ -33,8 +33,8 @@ export default function ContactAndForms() {
   const [newCommentAuthor, setNewCommentAuthor] = useState("");
   const [newCommentText, setNewCommentText] = useState("");
 
-  // Filtra apenas orações públicas para o mural
-  const oracoesPublicas = pedidosOracao.filter(x => !x.privado);
+  // Filtra apenas orações públicas que já foram aprovadas para o mural
+  const oracoesPublicas = pedidosOracao.filter(x => !x.privado && x.aprovado);
 
   const handleOpenForm = () => {
     if (!quickMsg.trim()) return;

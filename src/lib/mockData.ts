@@ -137,6 +137,7 @@ export interface PedidoOracao {
   anonimo: boolean;
   atendido: boolean;
   privado: boolean;
+  aprovado: boolean;
   amens: number;
   comentarios: ComentarioOracao[];
   motivo: string;
@@ -661,6 +662,7 @@ export const PRAYERS_PADRAO: PedidoOracao[] = [
     anonimo: false,
     atendido: false,
     privado: false,
+    aprovado: true,
     amens: 161,
     comentarios: [
       { id: "c_1", autor: "Maria Souza", texto: "Glória a Deus, Wilson! Estarei orando por você nessa caminhada.", data: "2026-07-13" },
@@ -677,6 +679,7 @@ export const PRAYERS_PADRAO: PedidoOracao[] = [
     anonimo: false,
     atendido: false,
     privado: false,
+    aprovado: true,
     amens: 42,
     comentarios: [
       { id: "c_3", autor: "Marcos Lima", texto: "Orando pela saúde da sua avó. Deus está no controle.", data: "2026-07-15" }
@@ -692,6 +695,7 @@ export const PRAYERS_PADRAO: PedidoOracao[] = [
     anonimo: true,
     atendido: false,
     privado: false,
+    aprovado: true,
     amens: 28,
     comentarios: [],
     motivo: "Vida Financeira e Trabalho"
@@ -1015,18 +1019,28 @@ export class LocalDatabase {
     return this.get<PedidoOracao[]>('pedidos_oracao', PRAYERS_PADRAO);
   }
 
-  addPedidoOracao(po: Omit<PedidoOracao, 'id' | 'data' | 'atendido' | 'amens' | 'comentarios'>) {
+  addPedidoOracao(po: Omit<PedidoOracao, 'id' | 'data' | 'atendido' | 'aprovado' | 'amens' | 'comentarios'>) {
     const list = this.getPedidosOracao();
     const newPo: PedidoOracao = {
       ...po,
       id: `po_${Math.random().toString(36).substr(2, 9)}`,
       data: getCurrentLocalDateString(),
       atendido: false,
+      aprovado: false, // Novos pedidos de oração públicos precisam de aprovação prévia
       amens: 0,
       comentarios: []
     };
     this.set('pedidos_oracao', [newPo, ...list]);
     return newPo;
+  }
+
+  marcarPedidoOracaoAprovado(id: string, aprovado: boolean) {
+    const list = this.getPedidosOracao();
+    const item = list.find(x => x.id === id);
+    if (item) {
+      item.aprovado = aprovado;
+      this.set('pedidos_oracao', list);
+    }
   }
 
   marcarPedidoOracaoAtendido(id: string, atendido: boolean) {

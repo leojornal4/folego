@@ -31,54 +31,39 @@ export async function shareCard(options: ShareCardOptions, showSuccess: (msg: st
     return true;
   }
 
-  // --- Renderizar Imagem Premium no Canvas ---
+  // --- Renderizar Imagem Premium no Canvas (Minimalista e Clean) ---
 
-  // A. Fundo Creme/Ivory Claro com Gradiente Suave
-  const gradient = ctx.createLinearGradient(0, 0, 800, 800);
-  gradient.addColorStop(0, "#ffffff");
-  gradient.addColorStop(1, "#f7f5f0");
-  ctx.fillStyle = gradient;
+  // A. Fundo Branco Puro (Estilo Clean)
+  ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, 800, 800);
 
-  // B. Moldura Dourada / Azul Suave Decorativa
-  ctx.strokeStyle = "#e5c07b"; // Dourado
-  ctx.lineWidth = 4;
-  ctx.strokeRect(30, 30, 740, 740);
-
-  ctx.strokeStyle = "#d4af37"; // Dourado interno mais fino
+  // B. Moldura Ultra-Fina e Discreta (Apenas para destacar em fundos brancos)
+  ctx.strokeStyle = "#f3f4f6"; // Cinza claro quase imperceptível
   ctx.lineWidth = 1;
-  ctx.strokeRect(38, 38, 724, 724);
+  ctx.strokeRect(30, 30, 740, 740);
 
   // C. Branding Superior (Fôlego)
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
 
-  // Nome Fôlego
-  ctx.font = "bold 38px Georgia, serif";
-  ctx.fillStyle = "#2563eb"; // Soft Blue da identidade
-  ctx.fillText(brandingName, 400, 75);
+  // Nome Fôlego (Charcoal Escuro elegante)
+  ctx.font = "bold 24px Georgia, serif";
+  ctx.fillStyle = "#111827"; 
+  ctx.fillText(brandingName.toUpperCase(), 400, 85);
 
-  // Slogan
-  ctx.font = "italic 16px Georgia, serif";
-  ctx.fillStyle = "#6b7280"; // Gray-500
-  ctx.fillText(brandingSlogan, 400, 125);
+  // Slogan (Cinza bem leve e minimalista)
+  ctx.font = "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillStyle = "#9ca3af";
+  ctx.fillText(brandingSlogan, 400, 122);
 
-  // Divisor Dourado sob Branding
-  ctx.beginPath();
-  ctx.moveTo(350, 160);
-  ctx.lineTo(450, 160);
-  ctx.strokeStyle = "#e5c07b";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // D. Tipo do Cartão (Título do Card)
-  ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillStyle = "#b45309"; // Amber-700 / Ouro escuro
-  ctx.fillText(options.cardType.toUpperCase(), 400, 200);
+  // D. Tipo do Cartão (Subtítulo do Card em uppercase espaçado)
+  ctx.font = "bold 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillStyle = "#9ca3af";
+  ctx.fillText(options.cardType.toUpperCase(), 400, 210);
 
   // E. Conteúdo Principal (Texto Envelopado / Quebra de Linha Automática)
-  ctx.fillStyle = "#1f2937"; // Gray-800
-  ctx.font = "italic 26px Georgia, serif";
+  ctx.fillStyle = "#1f2937"; // Charcoal suave
+  ctx.font = "italic 23px Georgia, serif";
 
   // Limpar tags HTML do conteúdo (caso venha do Devocional)
   const cleanContent = options.content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -86,7 +71,7 @@ export async function shareCard(options: ShareCardOptions, showSuccess: (msg: st
   // Função para quebrar texto em linhas
   const wrapText = (text: string, maxWidth: number): string[] => {
     const words = text.split(" ");
-    const lines: string[] = [];
+    const linesArr: string[] = [];
     let currentLine = "";
 
     for (let n = 0; n < words.length; n++) {
@@ -94,40 +79,46 @@ export async function shareCard(options: ShareCardOptions, showSuccess: (msg: st
       const metrics = ctx.measureText(testLine);
       const testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
-        lines.push(currentLine.trim());
+        linesArr.push(currentLine.trim());
         currentLine = words[n] + " ";
       } else {
         currentLine = testLine;
       }
     }
-    lines.push(currentLine.trim());
-    return lines;
+    linesArr.push(currentLine.trim());
+    return linesArr;
   };
 
-  const lines = wrapText(cleanContent, 620); // Largura máxima do bloco de texto: 620px
+  const lines = wrapText(cleanContent, 580); // Margem interna confortável
+
+  // Formata a primeira e última linhas para terem aspas únicas e corretas de citação
+  if (lines.length > 0) {
+    lines[0] = `“${lines[0]}`;
+    lines[lines.length - 1] = `${lines[lines.length - 1]}”`;
+  }
 
   // Calcular Y inicial para centralizar o bloco de texto verticalmente
-  const lineHeight = 38;
+  const lineHeight = 42; // Maior espaçamento vertical para melhor legibilidade (respiro)
   const blockHeight = lines.length * lineHeight;
-  let startY = 430 - blockHeight / 2; // Centralizado no meio (cerca de Y=430)
+  let startY = 440 - blockHeight / 2; 
 
   // Renderizar cada linha
   lines.forEach((line) => {
-    ctx.fillText(`"${line}"`, 400, startY);
+    ctx.fillText(line, 400, startY);
     startY += lineHeight;
   });
 
   // F. Elemento Extra (Autor, Referência Bíblica)
   if (options.extra) {
-    ctx.font = "bold 18px Georgia, serif";
-    ctx.fillStyle = "#b45309"; // Amber-700
+    ctx.font = "bold 15px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    ctx.fillStyle = "#4b5563"; // Slate Gray
     ctx.fillText(`— ${options.extra}`, 400, startY + 25);
   }
 
   // G. Rodapé Discreto
-  ctx.font = "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillStyle = "#9ca3af"; // Gray-400
-  ctx.fillText("Compartilhado do Portal de Leitura Bíblica", 400, 725);
+  ctx.font = "10px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillStyle = "#d1d5db"; // Cinza muito claro e minimalista
+  ctx.fillText("folego.app", 400, 715);
 
   // --- Enviar para Web Share API ou Fallback ---
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);

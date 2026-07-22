@@ -86,6 +86,7 @@ interface AppContextProps {
   adicionarAviso: (a: Omit<Aviso, "id">) => void;
   adicionarNoticia: (n: Omit<Noticia, "id">) => void;
   atenderPedidoOracao: (id: string, atendido: boolean) => void;
+  aprovarPedidoOracao: (id: string, aprovado: boolean) => void;
   atenderPedidoVisita: (id: string, atendido: boolean) => void;
   editarEvento: (e: Evento) => void;
   excluirEvento: (id: string) => void;
@@ -592,6 +593,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const aprovarPedidoOracao = async (id: string, aprovado: boolean) => {
+    if (!db) return;
+    db.marcarPedidoOracaoAprovado(id, aprovado);
+    recarregarDados();
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.from("pedidos_oracao").update({ aprovado }).eq("id", id);
+        syncFromSupabase();
+      } catch (err) {
+        console.error("Erro Supabase Aprovar Oracao:", err);
+      }
+    }
+  };
+
   const atenderPedidoVisita = async (id: string, atendido: boolean) => {
     if (!db) return;
     db.marcarPedidoVisitaAtendido(id, atendido);
@@ -778,6 +794,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         adicionarAviso,
         adicionarNoticia,
         atenderPedidoOracao,
+        aprovarPedidoOracao,
         atenderPedidoVisita,
         editarEvento,
         excluirEvento,

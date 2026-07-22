@@ -18,6 +18,7 @@ export default function AdminDashboard() {
     adicionarLeitura,
     adicionarDevocional,
     atenderPedidoOracao,
+    aprovarPedidoOracao,
     acessos,
     excluirLeitura,
     excluirDevocional,
@@ -1435,48 +1436,74 @@ export default function AdminDashboard() {
                               </div>
                             </td>
                             <td className="py-4 px-2">
-                              {p.privado ? (
-                                <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full font-bold text-[10px]">
-                                  🔒 Privado
-                                </span>
-                              ) : (
-                                <span className="bg-soft-blue-50 dark:bg-soft-blue-900/20 text-soft-blue-500 px-2 py-0.5 rounded-full font-bold text-[10px]">
-                                  🌐 Público
-                                </span>
-                              )}
-                            </td>
-                            <td className="py-4 px-2">
-                              {p.atendido ? (
-                                <span className="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full font-bold">
-                                  Intercedido
-                                </span>
-                              ) : (
-                                <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full font-bold">
-                                  Pendente
-                                </span>
-                              )}
-                            </td>
-                            <td className="py-4 px-2 text-right">
-                              <div className="flex items-center justify-end space-x-2">
-                                <button
-                                  onClick={() => atenderPedidoOracao(p.id, !p.atendido)}
-                                  className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-colors ${
-                                    p.atendido
-                                      ? "bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200"
-                                      : "bg-soft-blue-500 text-white hover:bg-soft-blue-600"
-                                  }`}
-                                >
-                                  {p.atendido ? "Marcar Pendente" : "Marcar Intercedido"}
-                                </button>
-                                <button
-                                  onClick={() => { excluirPedidoOracao(p.id); showSuccess("Pedido de oração excluído!"); }}
-                                  className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors"
-                                  title="Excluir Pedido"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </td>
+                               {p.privado ? (
+                                 <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full font-bold text-[10px]">
+                                   🔒 Privado
+                                 </span>
+                               ) : (
+                                 <div className="flex flex-col space-y-1">
+                                   <span className="bg-soft-blue-50 dark:bg-soft-blue-900/20 text-soft-blue-500 px-2 py-0.5 rounded-full font-bold text-[10px] w-max">
+                                     🌐 Mural Público
+                                   </span>
+                                   {p.aprovado ? (
+                                     <span className="text-[10px] text-green-600 dark:text-green-400 font-semibold">
+                                       ✓ Aprovado
+                                     </span>
+                                   ) : (
+                                     <span className="text-[10px] text-amber-500 dark:text-amber-400 font-semibold animate-pulse">
+                                       ⏳ Pendente
+                                     </span>
+                                   )}
+                                 </div>
+                               )}
+                             </td>
+                             <td className="py-4 px-2">
+                               {p.atendido ? (
+                                 <span className="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full font-bold">
+                                   Intercedido
+                                 </span>
+                               ) : (
+                                 <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full font-bold">
+                                   Pendente
+                                 </span>
+                               )}
+                             </td>
+                             <td className="py-4 px-2 text-right">
+                               <div className="flex items-center justify-end gap-1.5 flex-wrap">
+                                 {!p.privado && (
+                                   <button
+                                     onClick={() => {
+                                       aprovarPedidoOracao(p.id, !p.aprovado);
+                                       showSuccess(p.aprovado ? "Pedido ocultado do mural!" : "Pedido aprovado e publicado no mural!");
+                                     }}
+                                     className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                                       p.aprovado
+                                         ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/25"
+                                         : "bg-green-600 text-white hover:bg-green-700 shadow-sm"
+                                     }`}
+                                   >
+                                     {p.aprovado ? "Ocultar" : "Aprovar"}
+                                   </button>
+                                 )}
+                                 <button
+                                   onClick={() => atenderPedidoOracao(p.id, !p.atendido)}
+                                   className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-colors cursor-pointer ${
+                                     p.atendido
+                                       ? "bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200"
+                                       : "bg-soft-blue-500 text-white hover:bg-soft-blue-600"
+                                   }`}
+                                 >
+                                   {p.atendido ? "Pendente" : "Intercedido"}
+                                 </button>
+                                 <button
+                                   onClick={() => { if(confirm("Deseja realmente excluir este pedido?")) { excluirPedidoOracao(p.id); showSuccess("Pedido de oração excluído!"); } }}
+                                   className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors cursor-pointer"
+                                   title="Excluir Pedido"
+                                 >
+                                   <Trash2 className="w-3.5 h-3.5" />
+                                 </button>
+                               </div>
+                             </td>
                           </tr>
                         ))
                       ) : (
