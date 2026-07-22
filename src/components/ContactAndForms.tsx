@@ -95,7 +95,7 @@ export default function ContactAndForms() {
       <div className="p-4 sm:p-5 rounded-3xl bg-card-bg border border-border-subtle shadow-[0_8px_30px_rgb(0,0,0,0.01)] flex items-center space-x-3">
         <input
           type="text"
-          placeholder="Descreva aqui sua oração..."
+          placeholder="Descreva seu pedido de oração..."
           value={quickMsg}
           onChange={(e) => setQuickMsg(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') handleOpenForm(); }}

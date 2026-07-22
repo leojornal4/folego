@@ -68,12 +68,55 @@ export default function DailyHub() {
   // Estatísticas de Progresso
   const totalDiasAno = 365;
   const diasConcluidosAno = Object.values(progressoLeitura).filter(Boolean).length;
-  // Simular progresso se for zero para mostrar barra bonita
+  
+  // Calcular dinamicamente o progresso da semana nos últimos 7 dias
   const totalDiasSemana = 7;
-  // Pega os últimos 7 dias e vê quantos concluiu
-  const diasConcluidosSemana = 4; // Mock dinâmico para dar sensação premium se o usuário estiver novo
+  const getCompletedLast7Days = () => {
+    let count = 0;
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const tzOffset = d.getTimezoneOffset() * 60000;
+      const dateKey = (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 10);
+      if (progressoLeitura[dateKey] === true) {
+        count++;
+      }
+    }
+    return count;
+  };
+  const diasConcluidosSemana = getCompletedLast7Days();
 
-  const streakAtual = diasConcluidosAno > 0 ? diasConcluidosAno + 15 : 12; // Dar um streak de demonstração premium
+  // Calcular dinamicamente a sequência de dias consecutivos (streak)
+  const getRealStreak = () => {
+    let streak = 0;
+    const today = new Date();
+    const tzOffsetToday = today.getTimezoneOffset() * 60000;
+    const todayKey = (new Date(today.getTime() - tzOffsetToday)).toISOString().slice(0, 10);
+    const completedToday = progressoLeitura[todayKey] === true;
+
+    let checkDate = new Date();
+    if (!completedToday) {
+      checkDate.setDate(today.getDate() - 1);
+    }
+
+    while (true) {
+      const tzOffset = checkDate.getTimezoneOffset() * 60000;
+      const dateKey = (new Date(checkDate.getTime() - tzOffset)).toISOString().slice(0, 10);
+      if (progressoLeitura[dateKey] === true) {
+        streak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    if (completedToday) {
+      streak++;
+    }
+    return streak;
+  };
+  const streakAtual = getRealStreak();
 
   // Funções para renderizar o calendário customizado
   const meses = [
