@@ -1,7 +1,7 @@
 "use client";
 
 import { useApp } from "@/context/AppContext";
-import { Sun, Moon, Compass, BookOpen, Heart, Menu, X } from "lucide-react";
+import { Sun, Moon, Compass, BookOpen, Heart, Menu, X, BookMarked } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Header() {
@@ -42,6 +42,7 @@ export default function Header() {
   const menuItems = [
     { id: "diario", label: "Diário", icon: Compass },
     { id: "leitura", label: "Leitura", icon: BookOpen },
+    { id: "estudos", label: "Estudos", icon: BookMarked },
     { id: "contato", label: "Pedido de Oração", icon: Heart },
   ];
 

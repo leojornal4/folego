@@ -43,6 +43,26 @@ export interface LeituraProgramada {
   trechoBiblico?: string; // Campo opcional para conter o texto bíblico digitado
 }
 
+export interface Licao {
+  id: string;
+  titulo: string;
+  introducao: string;
+  conteudo: string;
+  passagens: string[]; // ex: ["Filipenses 4:6-7"]
+  reflexao: string[]; // perguntas
+  oracao: string;
+}
+
+export interface EstudoTematico {
+  id: string;
+  titulo: string;
+  descricao: string;
+  categoria: string;
+  imagemUrl: string;
+  ico: string; // nome do ícone lucide
+  licoes: Licao[];
+}
+
 export interface Devocional {
   data: string; // Formato YYYY-MM-DD
   titulo: string;
@@ -267,6 +287,89 @@ export const LEITURAS_PADRAO: LeituraProgramada[] = [
     data: "2026-07-21",
     leituras: ["2 Crônicas 4:1–6:11", "Salmos 18:1-24", "Provérbios 22:17-29", "Romanos 8:1-17"],
     tempoEstimado: 27
+  }
+];
+
+export const ESTUDOS_TEMATICOS_PADRAO: EstudoTematico[] = [
+  {
+    id: "ansiedade",
+    titulo: "Libertação da Ansiedade",
+    descricao: "Descubra como a paz de Deus pode guardar seu coração e sua mente diante das preocupações deste mundo.",
+    categoria: "Vida Cristã",
+    imagemUrl: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=800&auto=format&fit=crop",
+    ico: "Compass",
+    licoes: [
+      {
+        id: "ansiedade-1",
+        titulo: "O Cuidado de um Pai Amoroso",
+        introducao: "A base para vencer a ansiedade é compreender quem é Deus e o quanto Ele cuida de nós de forma paternal.",
+        conteudo: "<p>Jesus nos convida a observar a criação para aprender sobre a fidelidade e o sustento de Deus. Se Ele alimenta as aves do céu e veste os lírios do campo com tanto esplendor, por que hesitamos em acreditar que Ele cuidará de nós?</p><p>A ansiedade muitas vezes nasce da ilusão de que estamos sozinhos e precisamos carregar o peso do nosso próprio sustento e futuro. Quando reconhecemos a Deus como um Pai perfeito e amoroso, compreendemos que o nosso amanhã está guardado em Suas mãos graciosas.</p>",
+        passagens: ["Mateus 6:25-26", "1 Pedro 5:7"],
+        reflexao: [
+          "Quais são as áreas da sua vida em que você tem mais dificuldade de confiar que Deus agirá como um Pai cuidadoso?",
+          "O que o exemplo das aves do céu e dos lírios do campo ensina sobre a provisão de Deus para você hoje?"
+        ],
+        oracao: "Pai querido, perdoa-me pelas vezes em que duvido do Teu cuidado amoroso. Ajuda-me a lembrar que sou precioso para Ti e que Tu governas o universo com amor e fidelidade. Entrego minhas preocupações em Tuas mãos. Amém."
+      },
+      {
+        id: "ansiedade-2",
+        titulo: "A Oração que Substitui a Ansiedade",
+        introducao: "A ansiedade e a oração são forças opostas; onde uma cresce, a outra diminui.",
+        conteudo: "<p>O apóstolo Paulo nos ensina uma rota prática para a paz: 'Não andem ansiosos por coisa alguma; antes, em tudo, apresentem as suas petições a Deus'. O antídoto para a preocupação não é a autoconfiança ou o otimismo vazio, mas a oração ativa combinada com gratidão.</p><p>Quando derramos o nosso coração perante o Senhor e agradecemos pelas bênçãos recebidas, tiramos os olhos dos problemas e os voltamos para a grandeza de Deus. Essa atitude desarma a ansiedade e abre caminho para a paz sobrenatural.</p>",
+        passagens: ["Filipenses 4:6-7", "Salmos 55:22"],
+        reflexao: [
+          "Como você pode transformar sua principal preocupação de hoje em um pedido de oração específico?",
+          "Quais são três motivos de gratidão pelos quais você pode agradecer a Deus hoje, mesmo em meio à luta?"
+        ],
+        oracao: "Senhor Deus, em vez de reter minhas preocupações no meu coração, eu as trago a Ti agora in oração. Obrigado por tudo o que já fizeste por mim. Coloco meus anseios diante do Teu altar e confio na Tua boa vontade. Em nome de Jesus, Amém."
+      },
+      {
+        id: "ansiedade-3",
+        titulo: "A Paz que Guarda o Coração",
+        introducao: "A paz de Deus não é a ausência de tempestades, mas um guarda-costas espiritual que guarda nossa mente em Cristo.",
+        conteudo: "<p>A promessa bíblica é extraordinária: a paz de Deus, que excede todo o entendimento humano, guardará os nossos corações e as nossas mentes em Cristo Jesus. A palavra usada originalmente para 'guardará' refere-se a uma sentinela militar protegendo uma fortaleza.</p><p>Essa paz não depende das circunstâncias ao redor. Ela é o Espírito Santo operando um consolo sobrenatural que blinda nossos sentimentos e pensamentos contra os ataques de dúvida e desespero.</p>",
+        passagens: ["João 14:27", "Isaías 26:3"],
+        reflexao: [
+          "Você já experimentou a paz de Deus em um momento em que as circunstâncias eram totalmente desfavoráveis? Como foi?",
+          "De que maneira você pode alimentar sua mente com a verdade de Cristo para fortalecer essa blindagem espiritual?"
+        ],
+        oracao: "Jesus, Tu disseste: 'Deixo-vos a paz, a minha paz vos dou'. Eu recebo essa paz hoje. Declaro que o meu coração não se turbará e nem terá medo, pois a Tua presença está comigo e me dá descanso seguro. Amém."
+      }
+    ]
+  },
+  {
+    id: "fe",
+    titulo: "Fortalecendo a Fé em Tempos de Crise",
+    descricao: "Aprenda a fincar suas raízes em Deus para permanecer firme quando as tempestades da vida soprarem.",
+    categoria: "Doutrina",
+    imagemUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop",
+    ico: "Shield",
+    licoes: [
+      {
+        id: "fe-1",
+        titulo: "Firmeza sobre a Rocha",
+        introducao: "A nossa estabilidade espiritual depende de onde escolhemos construir a nossa base.",
+        conteudo: "<p>Jesus compara aquele que ouve e pratica Suas palavras ao homem prudente que construiu sua casa sobre a rocha. As tempestades, ventos e chuvas vieram, mas a casa não caiu. Isso nos ensina que a fé inabalável não é a que nunca enfrenta tempestades, mas a que está ancorada em Cristo.</p><p>Praticar a palavra nas pequenas escolhas diárias é o que solidifica as nossas fundações na Rocha Eterna.</p>",
+        passagens: ["Mateus 7:24-25", "Lucas 6:47-49"],
+        reflexao: [
+          "O que significa, na prática da sua rotina diária, construir a sua vida sobre a Rocha?",
+          "Identifique alguma área da sua vida que pode estar construída sobre a areia (opiniões, recursos passageiros)."
+        ],
+        oracao: "Eterno Senhor, Tu és a minha Rocha e a minha Salvação. Ajuda-me a ser não apenas ouvinte, mas praticante de Tua palavra, para que minha fé permaneça inabalável quando as dificuldades vierem. Amém."
+      },
+      {
+        id: "fe-2",
+        titulo: "O Escudo Protetor da Fé",
+        introducao: "Como usar o escudo da fé para apagar todos os dardos inflamados do inimigo.",
+        conteudo: "<p>Na armadura de Deus descrita por Paulo em Efésios, a fé é descrita como um escudo. O inimigo ataca constantemente com dardos de dúvida, acusação, medo e desespero. O escudo da fé bloqueia esses ataques ao declarar que Deus é bom, fiel e verdadeiro.</p><p>Quando confiamos no caráter de Deus, os dardos mentirosos perdem sua força e caem por terra sem nos ferir.</p>",
+        passagens: ["Efésios 6:16", "Salmos 18:30"],
+        reflexao: [
+          "Qual dardo de dúvida ou medo tem tentado atingir você nos últimos dias?",
+          "Como você pode erguer o escudo da fé contra essa mentira usando uma promessa específica da Palavra?"
+        ],
+        oracao: "Pai, eu levanto hoje o escudo da fé contra toda mentira, medo ou desânimo que tenta invadir minha mente. Declaro que o Teu caminho é perfeito e a Tua palavra é totalmente confiável. Sou protegido pelo Teu amor. Amém."
+      }
+    ]
   }
 ];
 

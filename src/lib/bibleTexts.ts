@@ -31,6 +31,111 @@ export const AUTHENTIC_BIBLE_TEXTS: { [key: string]: ChapterData[] } = {
     }
   ],
 
+  // Mateus 6:25-26
+  "Mateus 6:25-26": [
+    {
+      chapter: "Mateus 6:25-26",
+      verses: [
+        { v: 25, text: "Portanto vos digo: Não andeis cuidadosos quanto à vossa vida, pelo que haveis de comer ou pelo que haveis de beber; nem quanto ao vosso corpo, pelo que haveis de vestir. Não é a vida mais do que o mantimento, e o corpo mais do que o vestuário?" },
+        { v: 26, text: "Olhai para as aves do céu, que nem semeiam, nem segam, nem ajuntam em celeiros; e vosso Pai celestial as alimenta. Não tendes vós muito mais valor do que elas?" }
+      ]
+    }
+  ],
+
+  // 1 Pedro 5:7
+  "1 Pedro 5:7": [
+    {
+      chapter: "1 Pedro 5:7",
+      verses: [
+        { v: 7, text: "Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós." }
+      ]
+    }
+  ],
+
+  // Filipenses 4:6-7
+  "Filipenses 4:6-7": [
+    {
+      chapter: "Filipenses 4:6-7",
+      verses: [
+        { v: 6, text: "Não estejais inquietos por coisa alguma; antes as vossas petições sejam em tudo conhecidas diante de Deus pela oração e súplica, com ação de graças." },
+        { v: 7, text: "E a paz de Deus, que excede todo o entendimento, guardará os vossos corações e os vossos sentimentos em Cristo Jesus." }
+      ]
+    }
+  ],
+
+  // Salmos 55:22
+  "Salmos 55:22": [
+    {
+      chapter: "Salmo 55:22",
+      verses: [
+        { v: 22, text: "Lança o teu fardo sobre o Senhor, e ele te susterá; não permitirá jamais que o justo seja abalado." }
+      ]
+    }
+  ],
+
+  // João 14:27
+  "João 14:27": [
+    {
+      chapter: "João 14:27",
+      verses: [
+        { v: 27, text: "Deixo-vos a paz, a minha paz vos dou; não vo-la dou como o mundo a dá. Não se turbe o vosso coração, nem se atemorize." }
+      ]
+    }
+  ],
+
+  // Isaías 26:3
+  "Isaías 26:3": [
+    {
+      chapter: "Isaías 26:3",
+      verses: [
+        { v: 3, text: "Tu conservarás em paz aquele cuja mente está firme em ti; porque ele confia em ti." }
+      ]
+    }
+  ],
+
+  // Mateus 7:24-25
+  "Mateus 7:24-25": [
+    {
+      chapter: "Mateus 7:24-25",
+      verses: [
+        { v: 24, text: "Todo aquele, pois, que escuta estas minhas palavras, e as pratica, assemelhá-lo-ei ao homem prudente, que edificou a sua casa sobre a rocha;" },
+        { v: 25, text: "E desceu a chuva, e correram rios, e assopraram ventos, e combateram aquela casa, e não caiu, porque estava edificada sobre a rocha." }
+      ]
+    }
+  ],
+
+  // Lucas 6:47-49
+  "Lucas 6:47-49": [
+    {
+      chapter: "Lucas 6:47-49",
+      verses: [
+        { v: 47, text: "Qualquer que vem a mim e ouve as minhas palavras, e as pratica, eu vos mostrarei a quem é semelhante:" },
+        { v: 48, text: "É semelhante ao homem que edificou uma casa, e cavou, e abriu profunda vala, e pôs os alicerces sobre a rocha;" },
+        { v: 49, text: "Mas o que ouve e não pratica é semelhante ao homem que edificou uma casa sobre terra, sem alicerces..." }
+      ]
+    }
+  ],
+
+  // Efésios 6:16
+  "Efésios 6:16": [
+    {
+      chapter: "Efésios 6:16",
+      verses: [
+        { v: 16, text: "Tomando sobretudo o escudo da fé, com o qual podereis apagar todos os dardos inflamados do maligno." }
+      ]
+    }
+  ],
+
+  // Salmos 18:30
+  "Salmos 18:30": [
+    {
+      chapter: "Salmo 18:30",
+      verses: [
+        { v: 30, text: "O caminho de Deus é perfeito; a palavra do Senhor é provada; é um escudo para todos os que nele confiam." }
+      ]
+    }
+  ],
+
   // Salmos 11
   "Salmos 11": [
     {

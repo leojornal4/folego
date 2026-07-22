@@ -20,11 +20,14 @@ import {
   Ministerio,
   PedidoOracao,
   PedidoVisita,
-  getCurrentLocalDateString
+  getCurrentLocalDateString,
+  EstudoTematico,
+  Licao,
+  ESTUDOS_TEMATICOS_PADRAO
 } from "@/lib/mockData";
 import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
 
-export type TabType = "diario" | "leitura" | "comunidade" | "igreja" | "contato" | "admin";
+export type TabType = "diario" | "leitura" | "igreja" | "contato" | "admin" | "estudos";
 
 interface AppContextProps {
   // Database instance
@@ -92,6 +95,11 @@ interface AppContextProps {
   excluirNoticia: (id: string) => void;
   excluirLeitura: (data: string) => void;
   excluirDevocional: (data: string) => void;
+
+  // Estudos Temáticos
+  estudosTematicos: EstudoTematico[];
+  progressoEstudos: { [licaoId: string]: boolean };
+  marcarLicaoConcluida: (licaoId: string, concluida: boolean) => void;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -125,6 +133,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [progressoLeitura, setProgressoLeitura] = useState<{ [date: string]: boolean }>({});
   const [acessos, setAcessos] = useState<number>(0);
   const [motivos, setMotivos] = useState<string[]>([]);
+  
+  // Estados para Estudos Temáticos
+  const [estudosTematicos] = useState<EstudoTematico[]>(ESTUDOS_TEMATICOS_PADRAO);
+  const [progressoEstudos, setProgressoEstudos] = useState<{ [licaoId: string]: boolean }>({});
 
   // Sincronização assíncrona do Supabase
   const syncFromSupabase = async () => {
@@ -230,6 +242,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     // Contagem de Acesso
     incrementAcessosCount(database);
+
+    // Carregar progresso dos estudos temáticos
+    const storedProgress = localStorage.getItem("church_portal_estudos_progresso");
+    if (storedProgress) {
+      try {
+        setProgressoEstudos(JSON.parse(storedProgress));
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }, []);
 
   // Fetch or update rotated contents when date or DB changes
@@ -317,6 +339,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (!db) return;
     db.marcarLeituraConcluida(date, concluida);
     setProgressoLeitura(db.getProgressoLeitura());
+  };
+
+  const marcarLicaoConcluida = (licaoId: string, concluida: boolean) => {
+    const updated = { ...progressoEstudos, [licaoId]: concluida };
+    setProgressoEstudos(updated);
+    localStorage.setItem("church_portal_estudos_progresso", JSON.stringify(updated));
   };
 
   const enviarPedidoOracao = async (nome: string, telefone: string, mensagem: string, anonimo: boolean, privado: boolean, motivo: string) => {
@@ -719,7 +747,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         editarNoticia,
         excluirNoticia,
         excluirLeitura,
-        excluirDevocional
+        excluirDevocional,
+        
+        estudosTematicos,
+        progressoEstudos,
+        marcarLicaoConcluida
       }}
     >
       {children}

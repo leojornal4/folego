@@ -6,7 +6,8 @@ import DailyHub from "@/components/DailyHub";
 import BibleReading from "@/components/BibleReading";
 import ContactAndForms from "@/components/ContactAndForms";
 import AdminDashboard from "@/components/AdminDashboard";
-import { BookOpen, Compass, Shield, Heart } from "lucide-react";
+import ThematicStudies from "@/components/ThematicStudies";
+import { BookOpen, Compass, Shield, Heart, BookMarked } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function AppContent() {
@@ -19,6 +20,8 @@ function AppContent() {
         return <DailyHub />;
       case "leitura":
         return <BibleReading />;
+      case "estudos":
+        return <ThematicStudies />;
       case "contato":
         return <ContactAndForms />;
       case "admin":
@@ -94,10 +97,11 @@ function AppContent() {
       </footer>
 
       {/* Navegação Rápida Flutuante / Bottom Navigation (Apenas em Mobile) */}
-      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#16171d]/90 backdrop-blur-md border-t border-border-subtle/85 px-8 py-2 flex items-center justify-around text-[10px] font-bold">
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#16171d]/90 backdrop-blur-md border-t border-border-subtle/85 px-6 py-2 flex items-center justify-between text-[10px] font-bold">
         {[
           { id: "diario", label: "Diário", icon: Compass },
           { id: "leitura", label: "Leitura", icon: BookOpen },
+          { id: "estudos", label: "Estudos", icon: BookMarked },
           { id: "contato", label: "Pedidos", icon: Heart },
         ].map((tab) => {
           const Icon = tab.icon;
